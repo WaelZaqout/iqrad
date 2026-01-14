@@ -1,0 +1,1041 @@
+/* Media queries moved from styles.css */
+
+/* Extra large screens (4K and above) */
+@media (min-width: 2560px) {
+    .container {
+        max-width: 2000px;
+    }
+
+    .hero h1 {
+        font-size: 4rem;
+    }
+
+    .section-title {
+        font-size: 42px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    }
+
+    .stats-banner {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1400px;
+    }
+
+    .hero h1 {
+        font-size: 3.2rem;
+    }
+
+    .section-title {
+        font-size: 36px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
+
+    .project-cards-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stats-banner {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .modal-content {
+        width: 80%;
+        max-width: 900px;
+    }
+}
+
+/* Medium-large screens (laptops) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .container {
+        max-width: 1100px;
+    }
+
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    .stats-banner {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .modal-content {
+        width: 85%;
+        max-width: 800px;
+    }
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 992px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    /* Use mobile-style header on medium screens to avoid overlap and overflowing nav */
+    header {
+        top: 0;
+    }
+
+    /* hide desktop nav links and show mobile toggle on tablets */
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* hide notification bar on medium screens and show it in mobile menu */
+    .notification-bar {
+        display: none;
+    }
+
+    /* add notification to mobile menu */
+    .mobile-menu-content::before {
+        content: "مشروع جديد تمت الموافقة عليه! \"منصة تعليمية ذكية\" تبحث عن تمويل.";
+        display: block;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        text-align: center;
+        padding: 10px 12px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        border-radius: var(--border-radius);
+        white-space: normal;
+    }
+
+    .hero {
+        padding: 100px 0 60px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 17px;
+    }
+
+    .hero-buttons {
+        gap: 20px;
+    }
+
+    .btn-hero {
+        padding: 14px 30px;
+        font-size: 17px;
+    }
+
+    .section {
+        padding: 80px 0;
+    }
+
+    .section-title {
+        font-size: 30px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+    }
+
+    .stats-banner {
+        padding: 24px;
+        margin: -40px auto 60px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .search-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-input {
+        min-width: auto;
+        flex: 1;
+    }
+
+    .filters {
+        justify-content: center;
+        overflow-x: auto;
+        padding: 8px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+    }
+
+    .trust-logos {
+        gap: 30px;
+    }
+
+    .testimonials-container {
+        max-width: 700px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .chat-widget {
+        left: 20px;
+        width: 320px;
+        max-height: 480px;
+    }
+}
+
+/* Small screens (tablets and large mobiles) */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .navbar {
+        padding: 15px 0;
+    }
+
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+    }
+
+    .logo-text {
+        font-size: 28px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .hero {
+        padding: 80px 0 50px;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle,
+    .hero-target {
+        font-size: 16px;
+    }
+
+    .hero-buttons,
+    .mid-cta-btn,
+    .bottom-cta-btn {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .btn-hero,
+    .mid-cta-btn,
+    .bottom-cta-btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 14px 24px;
+        font-size: 16px;
+    }
+
+    .stats-banner {
+        padding: 20px;
+        margin: -50px auto 60px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+
+    .search-section {
+        padding: 24px;
+    }
+
+    .search-controls {
+        gap: 16px;
+    }
+
+    .search-input input {
+        padding: 12px 20px 12px 48px;
+        font-size: 15px;
+    }
+
+    .filters {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+        font-size: 17px;
+    }
+
+    .projects-grid,
+    .testimonial-grid,
+    .education-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .project-card {
+        max-width: 100%;
+    }
+
+    .mid-cta {
+        padding: 40px 0;
+        margin: 40px 0;
+    }
+
+    .mid-cta-title {
+        font-size: 24px;
+    }
+
+    .mid-cta-subtitle {
+        font-size: 17px;
+    }
+
+    .trust-section {
+        padding: 30px 0;
+        margin: 60px 0;
+    }
+
+    .trust-logos {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .trust-logo {
+        height: 35px;
+    }
+
+    .testimonials-container {
+        max-width: 100%;
+    }
+
+    .testimonial-slide {
+        margin: 0 10px;
+    }
+
+    .faq-question {
+        padding: 16px 20px;
+        font-size: 16px;
+    }
+
+    .faq-answer {
+        padding: 0 20px;
+    }
+
+    .bottom-cta {
+        padding: 40px 0;
+        margin: 40px 0;
+    }
+
+    .bottom-cta-title {
+        font-size: 24px;
+    }
+
+    .bottom-cta-subtitle {
+        font-size: 17px;
+    }
+
+    footer {
+        padding: 60px 0 30px;
+        margin-top: 60px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-title {
+        font-size: 16px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .newsletter-input input {
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+
+    .newsletter button {
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    .copyright {
+        flex-direction: column;
+        gap: 16px;
+        padding-top: 30px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+        max-height: 95vh;
+    }
+
+    .modal-details,
+    .apply-form {
+        grid-template-columns: 1fr;
+    }
+
+    .partners-logos,
+    .trust-logos {
+        gap: 20px;
+    }
+
+    .partner-logo,
+    .trust-logo {
+        height: 40px;
+    }
+
+    .floating-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .scroll-to-top {
+        bottom: 80px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .chat-widget {
+        left: 10px;
+        width: 300px;
+        max-height: 450px;
+    }
+
+    .chat-header {
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+
+    .chat-body p {
+        padding: 16px;
+        font-size: 14px;
+    }
+
+    .chat-options {
+        padding: 0 16px 16px;
+    }
+
+    .chat-option {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
+/* Extra small screens (mobiles) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 8px;
+    }
+
+    .hero {
+        padding: 60px 0 40px;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+
+    .hero-target {
+        font-size: 15px;
+        padding: 10px 20px;
+    }
+
+    .btn-hero {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+
+    .stats-banner {
+        padding: 16px;
+        margin: -30px auto 40px;
+        gap: 12px;
+    }
+
+    .stat-number {
+        font-size: 20px;
+    }
+
+    .stat-label {
+        font-size: 13px;
+    }
+
+    .search-section {
+        padding: 20px;
+    }
+
+    .search-input input {
+        padding: 10px 16px 10px 40px;
+        font-size: 14px;
+    }
+
+    .search-input i {
+        right: 16px;
+        font-size: 16px;
+    }
+
+    .filters {
+        padding: 6px;
+    }
+
+    .filter-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .section {
+        padding: 50px 0;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .section-subtitle {
+        font-size: 16px;
+    }
+
+    .project-card {
+        border-radius: var(--border-radius);
+    }
+
+    .project-thumbnail {
+        height: 160px;
+        font-size: 50px;
+    }
+
+    .project-header {
+        padding: 20px;
+    }
+
+    .project-title {
+        font-size: 18px;
+    }
+
+    .project-details {
+        padding: 20px;
+    }
+
+    .project-info {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .info-item {
+        padding: 12px;
+    }
+
+    .info-value {
+        font-size: 16px;
+    }
+
+    .progress-header {
+        font-size: 13px;
+    }
+
+    .invest-btn {
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    .mid-cta {
+        padding: 30px 10px;
+        margin: 30px 0;
+    }
+
+    .mid-cta-title {
+        font-size: 20px;
+    }
+
+    .mid-cta-subtitle {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    .mid-cta-illustration {
+        width: 180px;
+        height: 180px;
+        font-size: 70px;
+    }
+
+    .trust-logos {
+        gap: 16px;
+    }
+
+    .trust-logo {
+        height: 30px;
+    }
+
+    .testimonial-slide {
+        padding: 24px;
+    }
+
+    .testimonial-content {
+        font-size: 16px;
+    }
+
+    .testimonial-author {
+        font-size: 16px;
+    }
+
+    .testimonial-project {
+        font-size: 13px;
+    }
+
+    .carousel-nav {
+        margin-top: 16px;
+    }
+
+    .faq-item {
+        margin-bottom: 16px;
+    }
+
+    .faq-question {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+
+    .faq-answer {
+        padding: 0 16px;
+    }
+
+    .bottom-cta {
+        padding: 30px 10px;
+        margin: 30px 0;
+    }
+
+    .bottom-cta-title {
+        font-size: 20px;
+    }
+
+    .bottom-cta-subtitle {
+        font-size: 16px;
+    }
+
+    .footer-grid {
+        gap: 30px;
+    }
+
+    .footer-logo-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .footer-logo-text {
+        font-size: 24px;
+    }
+
+    .footer-description {
+        font-size: 13px;
+    }
+
+    .footer-links a {
+        font-size: 13px;
+    }
+
+    .social-link {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .newsletter h4 {
+        font-size: 15px;
+    }
+
+    .newsletter p {
+        font-size: 13px;
+    }
+
+    .newsletter-input input {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .newsletter button {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .copyright {
+        font-size: 12px;
+        gap: 12px;
+    }
+
+    .floating-btn {
+        bottom: 16px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+
+    .scroll-to-top {
+        bottom: 72px;
+        right: 16px;
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        width: 98%;
+        margin: 2% auto;
+        border-radius: var(--border-radius);
+    }
+
+    .modal-header {
+        padding: 16px 20px;
+        font-size: 20px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+
+    .chat-widget {
+        left: 5px;
+        width: 280px;
+        max-height: 400px;
+    }
+
+    .chat-header {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .chat-body p {
+        padding: 14px;
+        font-size: 13px;
+    }
+
+    .chat-options {
+        padding: 0 14px 14px;
+    }
+
+    .chat-option {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .logo-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+
+    .logo-text {
+        font-size: 26px;
+    }
+
+    .mid-cta,
+    .bottom-cta {
+        padding: 40px 20px;
+    }
+
+    .mid-cta-title,
+    .bottom-cta-title {
+        font-size: 24px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    /* Footer accordion on small screens */
+    .footer-column .footer-links,
+    .footer-column .newsletter,
+    .footer-column .trust-logos,
+    .footer-column .social-links {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.28s ease, padding 0.2s ease;
+        padding-top: 0;
+    }
+
+    .footer-column .footer-title {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        user-select: none;
+    }
+
+    /* Improve spacing and contrast for footer titles */
+    .footer-column .footer-title {
+        gap: 14px;
+        padding: 12px 0;
+        color: var(--gray-800);
+        font-weight: 700;
+    }
+
+    /* arrow indicator */
+    .footer-column .footer-title::after {
+        content: '\25BE'; /* small down triangle */
+        display: inline-block;
+        margin-inline-start: 12px;
+        transform: rotate(0deg);
+        transition: transform 0.2s ease;
+        font-size: 14px;
+        color: var(--gray-600);
+    }
+
+    .footer-column.active .footer-title::after {
+        transform: rotate(180deg);
+    }
+
+    .footer-column.active .footer-links,
+    .footer-column.active .newsletter,
+    .footer-column.active .trust-logos,
+    .footer-column.active .social-links {
+        max-height: 1200px; /* large enough to show content */
+        padding-top: 12px;
+    }
+
+    /* Make footer links more readable on mobile */
+    .footer-column .footer-links a {
+        color: var(--gray-700);
+        display: block;
+        padding: 8px 0;
+        line-height: 1.6;
+    }
+
+    /* Make contact button less visually dominant on small screens */
+    .footer-column .contact-btn {
+        background: transparent;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 8px 16px;
+        font-size: 15px;
+        box-shadow: none;
+    }
+
+    /* Ensure floating chat/button doesn't cover footer content */
+    footer {
+        padding-bottom: 120px;
+    }
+
+    .floating-btn, .chat-widget {
+        bottom: 10px !important;
+    }
+
+    /* Small-screen header: show only logo, start button and hamburger */
+    .navbar {
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* hide everything in nav-buttons by default, then show only start button and mobile toggle */
+    .nav-buttons > * {
+        display: none !important;
+    }
+
+    .nav-buttons .btn.btn-primary,
+    .nav-buttons #mobileMenuToggle,
+    .nav-buttons .mobile-menu-toggle {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* ensure mobile toggle is visible and sized nicely */
+    .mobile-menu-toggle, #mobileMenuToggle {
+        display: inline-flex !important;
+        font-size: 22px;
+        padding: 6px 8px;
+        margin-inline-start: 8px;
+        background: transparent;
+        border-radius: 8px;
+    }
+
+    /* keep logo visible and a bit smaller if needed */
+    .logo-text {
+        font-size: 24px;
+    }
+
+    /* replicate header rule for extra small screens */
+    .nav-buttons > * {
+        display: none !important;
+    }
+    .nav-buttons .btn.btn-primary,
+    .nav-buttons #mobileMenuToggle,
+    .nav-buttons .mobile-menu-toggle {
+        display: inline-flex !important;
+        align-items: center;
+    }
+    .logo-text {
+        font-size: 22px;
+    }
+}
+
+/* Safety rules to prevent horizontal overflow on small/medium screens */
+@media (max-width: 992px) {
+    /* Ensure modals never exceed viewport and respect box-sizing */
+    .modal,
+    .modal-content {
+        box-sizing: border-box;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 6% auto !important;
+        left: 0 !important;
+        right: 0 !important;
+        padding: 0 12px !important;
+    }
+
+    /* Mobile menu overlay should cover viewport and keep inner content scrollable */
+    .mobile-menu {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        z-index: 2000;
+        /* hidden by default; JS toggles .show */
+        display: none;
+        background: transparent;
+        /* align menu panel to left in RTL by using flex-end (start/end depend on direction)
+           this makes the panel appear from the left side for RTL pages */
+        justify-content: flex-end;
+        align-items: stretch;
+    }
+
+    .mobile-menu-content {
+        box-sizing: border-box;
+        width: 280px;
+        max-width: 85%;
+        padding: 20px;
+        overflow-y: auto;
+        background: var(--light);
+        /* start off-screen to the left and animate in when .show is applied */
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Show overlay only when .show is present and animate the panel in from left */
+    .mobile-menu.show {
+        display: flex !important;
+        background: rgba(0,0,0,0.35);
+    }
+
+    .mobile-menu.show .mobile-menu-content {
+        transform: translateX(0) !important;
+    }
+
+    /* Allow nav buttons to wrap instead of overflowing */
+    .nav-buttons,
+    .mobile-nav-buttons {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* Prevent images or wide elements from causing horizontal scroll */
+    img, iframe, .project-thumbnail img, .hero, .stats-banner {
+        max-width: 100%;
+        height: auto;
+        box-sizing: border-box;
+    }
+
+    /* As a last resort hide any horizontal overflow on body while preserving vertical scroll */
+    body {
+        overflow-x: hidden !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-menu-content {
+        width: 240px;
+        max-width: 90%;
+        padding: 16px;
+    }
+    .modal-content {
+        margin: 3% auto !important;
+    }
+}
+
+/* iOS Safari fix */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .modal {
+        -webkit-overflow-scrolling: touch;
+    }
+}

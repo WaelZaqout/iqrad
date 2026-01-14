@@ -1,0 +1,120 @@
+:root {
+    /* لوحة الألوان الأساسية */
+    --primary-color: #4f46e5;
+    /* Indigo 600 – اللون الأساسي */
+    --primary-color-dark: #4338ca;
+    /* Hover/Darker */
+    --secondary-color: #00BCD4;
+    /* تركواز */
+    --accent-color: #22c55e;
+    /* أخضر لزر مميز/نِقاط */
+    --warning-color: #fbbf24;
+    /* أصفر للشارات */
+    --danger-color: #ef4444;
+    /* أحمر عند الحاجة */
+    /* نصوص وخلفيات */
+    --text-color: #212121;
+    --muted-text: #6b7280;
+    /* نص ثانوي موحد */
+    --heading-color: #1f2937;
+
+    --page-bg: linear-gradient(135deg, #f0f4f8 30%, #e6e9f0 70%);
+    /* ألوان هادئة فاتحة للصفحة كاملة */
+
+    --section-bg: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+    /* أقسام بلون أبيض شبه نقي مع لمسة رمادية خفيفة */
+
+    /* تبقى للقسم كخلفية فقط */
+    --card-bg: #ffffff;
+
+    /* حدود وزوايا */
+    --border-color: #e5e7eb;
+    --border-radius-lg: 32px;
+    --border-radius-md: 20px;
+    --border-radius-sm: 12px;
+    /* رفعت من 8px لتتماشى مع باقي التصميم */
+
+    /* ظلال موحّدة */
+    --shadow-sm: 0 2px 8px rgba(79, 70, 229, 0.08);
+    --shadow-md: 0 4px 16px rgba(79, 70, 229, 0.10);
+    --shadow-lg: 0 10px 24px rgba(79, 70, 229, 0.12);
+
+    /* حجوم وخطوط */
+    --font-main: 'Cairo', Arial, sans-serif;
+    --font-size-lg: 30px;
+    /* للعناوين الرئيسية */
+    --font-size-md: 20px;
+    /* للعناوين الفرعية */
+    --font-size-sm: 15px;
+    /* للفقرات */
+
+    /* تباعد موحّد */
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-20: 20px;
+    --space-24: 24px;
+    --space-28: 28px;
+    --space-30: 30px;
+    --space-32: 32px;
+    --space-40: 40px;
+    --space-60: 60px;
+    --space-80: 80px;
+    --space-100: 100px;
+
+    /* حاوية وعرض */
+    --container-width: 1200px;
+
+    /* أزرار موحّدة */
+    --btn-padding-y: 12px;
+    --btn-padding-x: 28px;
+    --btn-radius: var(--border-radius-sm);
+    --btn-font-weight: 600;
+    --btn-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    --btn-bg: var(--primary-color);
+    --btn-text: #fff;
+    --btn-hover: var(--primary-color-dark);
+
+    --btn-outline-bg: #fff;
+    --btn-outline-text: var(--primary-color);
+    --btn-outline-border: var(--primary-color);
+    --btn-outline-hover-bg: #f3f4f6;
+
+    /* انتقالات */
+    --transition-fast: 0.2s ease;
+    --transition-med: 0.3s ease;
+
+    /* هوامش أقسام موحّدة */
+    --section-padding-inline: 40px;
+    --section-padding-block: 80px;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--heading-color);
+    font-family: var(--font-main);
+}
+
+p {
+    font-size: var(--font-size-sm);
+    color: var(--muted-text);
+}
+
+.btn-primary {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-radius: var(--btn-radius);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    font-weight: var(--btn-font-weight);
+    border: none;
+    box-shadow: var(--btn-shadow);
+    transition: all var(--transition-med);
+}
+
+.btn-primary:hover {
+    background: var(--btn-hover);
+    transform: translateY(-2px);
+}
