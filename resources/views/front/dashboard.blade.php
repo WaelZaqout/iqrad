@@ -13,6 +13,9 @@
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('assets/front/css/dashboard.css') }}">
+    @if (App::getLocale() == 'en')
+        <link rel="stylesheet" href="{{ asset('assets/front/css/en.css') }}">
+    @endif
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -21,11 +24,15 @@
     <header>
         <div class="container header-inner">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-hand-holding-usd"></i>
-                </div>
-                <span class="logo-text">{{ __('auth.p') }}</span>
+                <a href="{{ route('home') }}" class="logo-link"
+                    style="display: flex; align-items: center; gap: 1rem; text-decoration: none ; color: white;">
+                    <div class="logo-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <span class="logo-text">{{ __('auth.p') }}</span>
+                </a>
             </div>
+
 
             <div class="header-actions">
                 <!-- Notifications -->
@@ -89,14 +96,14 @@
 
                 <!-- Language Toggle -->
                 <div class="dropdown">
-                    <div class="icon-btn" data-bs-toggle="dropdown" style="cursor: pointer;" title="{{ __('auth.language') }} / {{ __('auth.arabic') }}">
+                    <div class="icon-btn" data-bs-toggle="dropdown" style="cursor: pointer;"
+                        title="{{ __('auth.language') }} / {{ __('auth.arabic') }}">
                         <i class="fas fa-globe fa-lg"></i>
                     </div>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ url('/lang/ar') }}"><i class="fas fa-language me-2"></i>
                                 {{ __('auth.arabic') }}</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/lang/en') }}"><i
-                                    class="fas fa-language me-2"></i>
+                        <li><a class="dropdown-item" href="{{ url('/lang/en') }}"><i class="fas fa-language me-2"></i>
                                 {{ __('auth.english') }}</a></li>
                     </ul>
                 </div>
@@ -121,18 +128,18 @@
                             <i class="fas fa-chevron-down hidden-mobile" style="font-size: 0.75rem; color: #64748b;"></i>
                         </div>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i
-                                        class="fas fa-user me-2"></i>
+                            <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="fas fa-user me-2"></i>
                                     {{ __('auth.profile') }}
-                                    </a></li>
+                                </a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-lock me-2"></i>
                                     {{ __('auth.change_password') }}</a></li>
                             @if (auth()->user()->role === 'investor' || auth()->user()->hasRole('investor'))
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-landmark me-2"></i>
                                         {{ __('auth.link_bank_account') }}</a></li>
                             @else
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-landmark me-2"></i> {{ __('auth.update_bank_account') }}</a></li>
-                                       </a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-landmark me-2"></i>
+                                        {{ __('auth.update_bank_account') }}</a></li>
+                                </a></li>
                             @endif
                             <li>
                                 <hr class="dropdown-divider">
@@ -188,7 +195,7 @@
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.total_invested_capital') }} </div>
                         <div class="card-value counter" data-count="{{ $totalCapital }}">0</div>
-                        <div class="card-unit">{{__('auth.sar')}}</div>
+                        <div class="card-unit">{{ __('auth.sar') }}</div>
                     </div>
                 </div>
 
@@ -236,7 +243,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.upcoming_payments') }}</div>
-                        <div class="card-value counter">0</div>
+                        <div class="card-value counter" data-count="{{ $upcomingPayments }}">0</div>
                         <div class="card-unit">{{ __('auth.payment') }}</div>
                     </div>
                 </div>
@@ -279,19 +286,6 @@
             @endif
         </div>
 
-        <!-- Quick Filters -->
-        <div class="quick-filters">
-            <button class="filter-btn active">{{ __('auth.all') }}</button>
-            @if (auth()->user()->role === 'investor' || auth()->user()->hasRole('investor'))
-                @foreach ($categories as $category)
-                    <button class="filter-btn">{{ $category->name }}</button>
-                @endforeach
-            @else
-                <button class="filter-btn">{{ __('auth.under_review') }}</button>
-                <button class="filter-btn">{{ __('auth.under_funding') }}</button>
-                <button class="filter-btn">{{ __('auth.fully_funded') }}</button>
-            @endif
-        </div>
         <!-- Primary CTA Button -->
         @if (auth()->user()->role !== 'investor' && !auth()->user()->hasRole('investor'))
             <div class="text-center mb-4">
@@ -300,7 +294,21 @@
                 </button>
             </div>
         @endif
+        <!-- Quick Filters -->
+        <div class="search-section">
 
+            <div class="filters">
+                <button onclick="filterProjects('all')" class="filter-btn active" id="btn-all">
+                    <i class="fas fa-layer-group"></i> {{ __('auth.all') }}
+                </button>
+                <button onclick="filterProjects('active')" class="filter-btn" id="btn-active">
+                    <i class="fas fa-bolt"></i> {{ __('auth.active') }}
+                </button>
+                <button onclick="filterProjects('completed')" class="filter-btn" id="btn-completed">
+                    <i class="fas fa-check-circle"></i> {{ __('auth.completed') }}
+                </button>
+            </div>
+        </div>
         @if (auth()->user()->role === 'investor' || auth()->user()->hasRole('investor'))
             @include('front.partials.investor-section')
         @else
@@ -319,7 +327,8 @@
                         </div>
                         <span class="logo-text">{{ __('auth.p') }}</span>
                     </div>
-                    <p style="font-size: 1rem; line-height: 1.8; opacity: 0.8; margin-bottom: 2rem;">{{ __('auth.p_description') }}</p>
+                    <p style="font-size: 1rem; line-height: 1.8; opacity: 0.8; margin-bottom: 2rem;">
+                        {{ __('auth.p_description') }}</p>
                     <div style="display: flex; gap: 1rem; font-size: 1.4rem;">
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -347,7 +356,8 @@
                 </div>
                 <div>
                     <h5 class="footer-title">{{ __('auth.subscribe_to_newsletter') }}</h5>
-                    <p style="margin-bottom: 1rem; opacity: 0.7;">{{ __('auth.subscribe_to_newsletter_description') }}</p>
+                    <p style="margin-bottom: 1rem; opacity: 0.7;">{{ __('auth.subscribe_to_newsletter_description') }}
+                    </p>
                     <div style="position: relative; margin-bottom: 1rem;">
                         <input type="email" placeholder="{{ __('auth.email') }}"
                             style="width: 100%; padding: 1rem; border-radius: 0.75rem; border: none; background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(5px);">
@@ -413,15 +423,7 @@
                 }
             });
 
-            // Filter buttons functionality
-            document.querySelectorAll('.filter-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
-            });
+
         });
     </script>
 
@@ -482,7 +484,23 @@
             });
         });
     </script>
+    <script>
+        function filterProjects(status) {
 
+            // Active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-' + status).classList.add('active');
+
+            // Fetch projects
+            fetch(`{{ route('projects.filter') }}?status=${status}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('projects-container').innerHTML = html;
+                });
+        }
+    </script>
 </body>
 
 </html>

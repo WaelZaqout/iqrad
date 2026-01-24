@@ -23,11 +23,13 @@ return new class extends Migration
                 ->constrained('categories')
                 ->onDelete('cascade');
 
-            $table->string('title');
+            $table->string('title_en', 255);
+            $table->string('title_ar', 255);
             $table->string('slug')->unique();
-            $table->text('summary')->nullable();
-            $table->longText('description')->nullable();
-
+            $table->text('summary_en')->nullable();
+            $table->text('summary_ar')->nullable();
+            $table->longText('description_en')->nullable();
+            $table->longText('description_ar')->nullable();
             $table->decimal('funding_goal', 15, 2);
             $table->decimal('funded_amount', 15, 2)->default(0);
             $table->float('interest_rate', 5, 2);

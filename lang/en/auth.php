@@ -18,14 +18,21 @@ return [
     // Filters
     'all' => 'All',
     'active_now' => 'Active Now',
+
+
     'completed' => 'Fully Funded',
+    'last_update' => 'Last Updated',
+    'fully_funded' => 'Fully Funded',
 
     // Buttons
     'details' => 'Details',
+    'see_all' => 'See All',
+    'edit' => 'Edit',
     'invest_now' => 'Invest Now',
+    'login_to_invest' => 'Login to Invest',
     'view_project' => 'View Project',
     'more_projects' => 'More Projects',
-
+    'chat' => 'Chat Support',
     // Mid CTA
     'cta_title' => 'Start Your Investment Journey Now',
     'cta_description' => 'Join a community of elite investors achieving sustainable profits by supporting innovative projects in the Kingdom.',
@@ -345,7 +352,12 @@ return [
 
     // Modal
     'invest_in_project' => 'Invest in Project',
-    'project_name' => 'Project Name',
+    'project_name_en' => 'Project Name(English)',
+    'project_name_ar' => 'Project Name(Arabic)',
+    'description_en' => 'Project Description (English)',
+    'description_ar' => 'Project Description (Arabic)',
+    'summary_en' => 'Summary (English)',
+    'summary_ar' => 'Summary (Arabic)',
     'minimum_amount' => 'Minimum Amount',
     'complete_payment' => 'Complete Payment',
     'digital_education_platform' => 'Digital Education Platform',
@@ -482,4 +494,13 @@ return [
     'Investment_Panel' => 'Investment Opportunities Panel',
     'promising_projects' => 'Browse the latest promising projects and start your investment today.',
     'new_project' => 'New Project',
+    'edit_project' => 'Edit Project',
+    'project_details' => 'Project Details',
+    'no_projects_found' => 'No projects found',
+    'try_other_filters' => 'Try using other filters to find projects that match your interests.',
+    'open_for_funding' => 'Open for Funding',
+    'more'=>'More',
+    'my_project'=>'My Project',
+    'edit_request' => 'Edit Funding Request'
+
 ];

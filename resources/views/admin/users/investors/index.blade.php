@@ -1,20 +1,20 @@
 @extends('admin.master')
 @section('content')
-@section('title', 'إدارة المشاريع')
+@section('title', __('admin.investors_management'))
 
 <div class="container">
     {{-- Header + إحصائيات --}}
     <div class="header-section mb-4">
         <div class="row align-items-center mb-4">
             <div class="col-lg-6">
-                <h2 class="mb-2 fw-bold text-primary">إدارة المشاريع</h2>
-                <p class="text-muted mb-0">إدارة ومراقبة جميع المشاريع في النظام</p>
+                <h2 class="mb-2 fw-bold text-primary">{{ __('admin.investors_management') }}</h2>
+                <p class="text-muted mb-0">{{ __('admin.manage_all_investors_in_system') }}</p>
             </div>
             <div class="col-lg-6 text-lg-end">
                 <div class="search-container">
                     <div class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
-                        <input id="searchByName" type="text" placeholder="البحث في المشاريع..." class="form-control"
+                        <input id="searchByName" type="text" placeholder="{{ __('admin.search_investors') }}" class="form-control"
                             value="{{ $q ?? '' }}">
                     </div>
                 </div>
@@ -77,13 +77,13 @@
                 <thead>
                     <tr>
                         <th style="white-space: nowrap; min-width: 50px;">#</th>
-                        <th style="min-width: 150px;">اسم المستثمر</th>
-                        <th style="min-width: 120px;">الايميل</th>
-                        <th style="min-width: 120px;">رقم الهاتف</th>
-                        <th style="white-space: nowrap; min-width: 120px;">تاريخ التسجيل </th>
-                        <th style="min-width: 100px;">نوع المستخدم</th>
-                        <th style="min-width: 100px;">الحالة</th>
-                        <th style="white-space: nowrap; min-width: 100px;">الإجراءات</th>
+                        <th style="min-width: 150px;">{{ __('admin.investor_name') }}</th>
+                        <th style="min-width: 120px;">{{ __('admin.email') }}</th>
+                        <th style="min-width: 120px;">{{ __('admin.phone_number') }}</th>
+                        <th style="white-space: nowrap; min-width: 120px;">{{ __('admin.registration_date') }}</th>
+                        <th style="min-width: 100px;">{{ __('admin.user_type') }}</th>
+                        <th style="min-width: 100px;">{{ __('admin.status') }}</th>
+                        <th style="white-space: nowrap; min-width: 100px;">{{ __('admin.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody id="categoriesTbody">

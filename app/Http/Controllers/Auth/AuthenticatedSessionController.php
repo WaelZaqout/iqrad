@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($user->hasRole('investor')) {
-            return redirect()->route('dashboard');
+            return redirect()->route('home');
         }
 
         // في حال لم يكن له دور

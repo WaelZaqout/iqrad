@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id(); // BIGINT pk
             $table->unsignedBigInteger('parent_id')->nullable(); // for subcategories
-            $table->string('name', 255);
+            $table->string('name_en', 255);
+            $table->string('name_ar', 255);
             $table->string('slug', 255)->unique();
             $table->string('image', 255)->nullable();
-            $table->text('description')->nullable();
+            $table->text('description_en')->nullable();
+            $table->text('description_ar')->nullable();
             $table->timestamps();
             // Optional: لو بدك تعمل علاقة على نفس الجدول
         });

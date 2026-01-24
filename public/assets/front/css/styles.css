@@ -399,6 +399,8 @@
         /* ---------------------------------------------------- */
         .project-cards-container {
             display: grid;
+            grid-column: 1 / -1;
+            /* يأخذ كل الأعمدة */
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 2.5rem;
             margin-bottom: 6rem;
@@ -1333,27 +1335,71 @@
         }
 
         .status-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: white;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-            z-index: 10;
-            letter-spacing: 0.5px;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            line-height: 1;
+            white-space: nowrap;
+
+            /* شكل أنيق */
+            background: #f1f5f9;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+
+            /* تأثير خفيف */
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+            transition: all 0.25s ease;
         }
 
-        .status-active {
-            background: rgba(16, 185, 129, 0.9);
+        .status-badge i {
+            font-size: 0.8rem;
         }
 
-        .status-completed {
-            background: rgba(59, 130, 246, 0.9);
+        .status-badge.warning {
+            background: #fff7ed;
+            color: #c2410c;
+            border-color: #fed7aa;
         }
+
+        .status-badge.success {
+            background: #ecfdf5;
+            color: #047857;
+            border-color: #a7f3d0;
+        }
+
+        .status-badge.info {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .status-badge.primary {
+            background: #eef2ff;
+            color: #4338ca;
+            border-color: #c7d2fe;
+        }
+
+        .status-badge.danger {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .status-badge.secondary {
+            background: #f8fafc;
+            color: #475569;
+            border-color: #e2e8f0;
+        }
+
+        .status-badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+        }
+
 
         /* Preloader */
         #preloader {
@@ -1771,4 +1817,37 @@
         .star-rating label:hover,
         .star-rating label:hover~label {
             color: #facc15;
+        }
+
+        .no-projects {
+            grid-column: 1 / -1;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 300px;
+            text-align: center;
+
+            padding: 3rem 1rem;
+            color: var(--gray-600);
+        }
+
+        .no-projects i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .no-projects h4 {
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .no-projects p {
+            font-size: 0.95rem;
+            color: var(--gray-500);
         }

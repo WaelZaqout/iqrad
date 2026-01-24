@@ -14,20 +14,30 @@
 
                 <p class="hero-lead">{{ __('auth.description') }}</p>
                 <div class="hero-buttons">
-                    <button onclick="document.getElementById('projects-section').scrollIntoView({behavior: 'smooth'})"
-                        class="btn btn-primary">
-                        <i class="fas fa-rocket"></i> {{ __('auth.start_investing') }}
-                    </button>
+                    @guest
+                        {{-- مستخدم غير مسجل دخول --}}
+                        <button data-tab="login" class="invest-btn open-auth">
+                            <i class="fas fa-coins"></i>
+                            {{ __('auth.login_to_invest') }}
+                        </button>
+                    @else
+                        @can('make_investment')
+                            <button onclick="document.getElementById('projects-section').scrollIntoView({behavior: 'smooth'})"
+                                class="btn btn-primary">
+                                <i class="fas fa-rocket"></i> {{ __('auth.start_investing') }}
+                            </button>
+                        @endcan
+                        @can('add_project')
+                            <button class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#fundingModal">
+                                <i class="fas fa-plus-circle me-2"></i> {{ __('auth.submit_project') }}
+                            </button>
+                        @endcan
 
-                    {{-- @if (auth()->user()->role !== 'investor' && !auth()->user()->hasRole('investor')) --}}
+                        <button onclick="openModal('imageModal')" class="btn btn-purple">
+                            <i class="fas fa-magic"></i> {{ __('auth.ai_intelligence') }}
+                        </button>
+                    @endguest
 
-                    <button class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#fundingModal">
-                        <i class="fas fa-plus-circle me-2"></i> {{ __('auth.submit_project') }}
-                    </button>
-                    {{-- @endif --}}
-                    <button onclick="openModal('imageModal')" class="btn btn-purple">
-                        <i class="fas fa-magic"></i> {{ __('auth.ai_intelligence') }}
-                    </button>
                 </div>
             </div>
             <div class="hero-illustration">
@@ -107,99 +117,127 @@
                 </button>
             </div>
         </div>
-
-        <!-- Projects Grid -->
-        <!-- Projects Grid (Static HTML Cards) -->
-
         <!-- Projects Grid -->
         <div id="projects-container" class="project-cards-container">
-            <!-- Project 1 -->
-            @foreach ($projects as $project)
+            @forelse ($projects as $project)
                 <div class="project-card">
                     <div class="project-thumbnail">
                         @if (!empty($project->image))
                             <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
                         @else
-                            <div class="project-thumbnail">
-
-                                <div class="placeholder">
-                                    <i class="fas fa-briefcase fa-2x" aria-hidden="true"></i>
-                                    <div style="font-weight:800;margin-top:6px;color:var(--primary)">
-                                        {{ $project->category->name }}
-                                    </div>
+                            <div class="placeholder">
+                                <i class="fas fa-briefcase fa-2x"></i>
+                                <div style="font-weight:800;margin-top:6px;color:var(--primary)">
+                                    {{ $project->category->name }}
                                 </div>
                             </div>
                         @endif
+
                         <span class="status-badge {{ $project->status_badge['class'] }}">
                             {{ $project->status_badge['label'] }}
                         </span>
                     </div>
 
                     <div class="project-header">
-                        <h4 class="project-title">{{ $project->title }} </h4>
+                        <h4 class="project-title">{{ $project->title }}</h4>
                         <div class="project-purpose">
-                            <i class="fas fa-tag text-primary"></i> {{ $project->category->name }} &bull; زيادة خطوط
-                            الإنتاج لتلبية...
+                            <i class="fas fa-tag text-primary"></i>
+                            {{ $project->category->name }}
                         </div>
                     </div>
+
                     <div class="project-details">
                         <div class="project-info">
                             <div class="info-item">
                                 <div class="info-label">{{ __('auth.interest_rate') }}</div>
-                                <div class="info-value" style="color: var(--primary);">{{ $project->interest_rate }}%
+                                <div class="info-value" style="color: var(--primary)">
+                                    {{ $project->interest_rate }}%
                                 </div>
                             </div>
+
                             <div class="info-item">
                                 <div class="info-label">{{ __('auth.duration') }}</div>
-                                <div class="info-value">{{ $project->term_months }} {{ __('auth.month') }}</div>
+                                <div class="info-value">
+                                    {{ $project->term_months }} {{ __('auth.month') }}
+                                </div>
                             </div>
+
                             <div class="info-item">
                                 <div class="info-label">{{ __('auth.min_investment') }}</div>
                                 <div class="info-value">{{ $project->min_investment }}</div>
                             </div>
+
                             <div class="info-item">
                                 <div class="info-label">{{ __('auth.funding_goal') }}</div>
                                 <div class="info-value">{{ $project->funding_goal }}</div>
                             </div>
                         </div>
 
+
                         <div class="progress-container">
                             <div class="progress-header">
-                                <span>{{ __('auth.collected') }} {{ $project->percentage }}%</span>
-                                <span>{{ $project->funded_amount }} / {{ $project->funding_goal }}
-                                    {{ __('auth.sar') }}</span>
+                                <span>{{ __('auth.collected') }}
+                                    {{ $project->funded_amount > 0 ? round($project->percentage) : 0 }}%</span>
+                                <span>
+                                    {{ number_format($project->funded_amount, 0) }} /
+                                    {{ number_format($project->funding_goal, 0) }}
+                                    {{ __('auth.sar') }}
+                                </span>
                             </div>
+SupportChatController
+
                             <div class="progress-bar">
                                 <div class="progress-fill" style="width: {{ $project->percentage }}%"></div>
                             </div>
                         </div>
+
                         <div class="card-actions">
-                            <button class="details-btn">
-                                <i class="far fa-eye"></i>
-                                <a href="{{ route('details', $project->id) }}"
-                                    class="details-label">{{ __('auth.details') }}</a>
-                            </button>
-                            <button class="invest-btn" onclick="openInvestModal(this)" data-id="{{ $project->id }}"
-                                data-title=" {{ $project->title }} " data-min="{{ $project->min_investment }}"
-                                data-rate="{{ $project->interest_rate }}">
+                            <a href="{{ route('details', $project->id) }}" class="details-btn">
+                                <i class="far fa-eye"></i> {{ __('auth.details') }}
+                            </a>
 
-                                <i class="fas fa-coins"></i>
-                                {{ __('auth.invest_now') }}
-                            </button>
-
+                            @guest
+                                <button class="invest-btn open-auth" data-tab="login">
+                                    <i class="fas fa-coins"></i>
+                                    {{ __('auth.login_to_invest') }}
+                                </button>
+                            @else
+                                @can('make_investment')
+                                    @if ($project->percentage >= 100 || $project->status === 'completed')
+                                        <button class="invest-btn completed" disabled>
+                                            <i class="fas fa-check-circle"></i>
+                                            {{ __('auth.completed') }}
+                                        </button>
+                                    @else
+                                        <button class="invest-btn" onclick="openInvestModal(this)" data-id="{{ $project->id }}"
+                                            data-title="{{ $project->title }}" data-min="{{ $project->min_investment }}"
+                                            data-rate="{{ $project->interest_rate }}">
+                                            <i class="fas fa-coins"></i>
+                                            {{ __('auth.invest_now') }}
+                                        </button>
+                                    @endif
+                                @endcan
+                            @endguest
                         </div>
+
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="no-projects">
+                    <i class="fas fa-folder-open"></i>
+                    <h4>{{ __('auth.no_projects_found') }}</h4>
+                    <p>{{ __('auth.try_other_filters') }}</p>
+                </div>
+            @endforelse
+
             <div class="load-more-wrapper">
                 <a href="{{ route('project') }}" class="load-more-btn">
                     <i class="fas fa-layer-group"></i>
                     {{ __('auth.more_projects') }}
                 </a>
             </div>
-
-
         </div>
+
 
     </main>
 
@@ -352,6 +390,23 @@
                 answer.style.display = 'block';
                 toggle.style.transform = 'rotate(180deg)';
             }
+        }
+    </script>
+    <script>
+        function filterProjects(status) {
+
+            // Active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-' + status).classList.add('active');
+
+            // Fetch projects
+            fetch(`{{ route('projects.filter') }}?status=${status}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('projects-container').innerHTML = html;
+                });
         }
     </script>
 @endsection

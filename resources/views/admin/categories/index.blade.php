@@ -1,6 +1,6 @@
 @extends('admin.master')
 @section('content')
-@section('title', 'إدارة الأقسام')
+@section('title') {{ __('admin.categories_management') }} @endsection
 
 
 <div class="container">
@@ -8,12 +8,12 @@
     {{-- Header + إحصائيات + زر إضافة --}}
     <div class="header">
         <div class="search-bar mb-3">
-            <input id="searchByName" type="text" placeholder="الاسم" class="form-control" value="{{ $q ?? '' }}">
+            <input id="searchByName" type="text" placeholder="{{ __('admin.search_name') }}" class="form-control" value="{{ $q ?? '' }}">
 
         </div>
 
         <a href="#" class="add-button">
-            <i class="fas fa-plus"></i> إضافة قسم
+            <i class="fas fa-plus"></i> {{ __('admin.add_category') }}
         </a>
     </div>
     <div class="table-container">
@@ -21,11 +21,11 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>الاسم</th>
-                    <th>صورة القسم</th>
-                    <th>الرابط المختصر</th>
-                    <th>الوصف</th>
-                    <th>الإجراءات</th>
+                    <th>{{ __('admin.category_image') }}</th>
+                    <th>{{ __('admin.name') }}</th>
+                    <th>{{ __('admin.slug') }}</th>
+                    <th>{{ __('admin.description') }}</th>
+                    <th>{{ __('admin.actions') }}</th>
                 </tr>
             </thead>
             <tbody id="categoriesTbody">
@@ -57,15 +57,17 @@
     const cancelBtn = document.getElementById('cancelBtn');
     const saveBtn = document.getElementById('saveBtn');
 
-    const nameInput = document.getElementById('name');
-    const descInput = document.querySelector('[name="description"]'); // textarea
+    const nameEnInput = document.getElementById('name_en');
+    const nameArInput = document.getElementById('name_ar');
+    const descEnInput = document.querySelector('[name="description_en"]'); // textarea
+    const descArInput = document.querySelector('[name="description_ar"]'); // textarea
     const imagePreview = document.getElementById('imagePreview');
 
     // ==========================
     // فتح المودال للإضافة
     // ==========================
     function openAddModal() {
-        modalTitle.innerText = 'إضافة قسم جديد';
+        modalTitle.innerText = '{{ __('admin.add_new_category') }}';
         categoryForm.reset();
         methodSpoof.value = ''; // POST
         categoryForm.action = "{{ route('categories.store') }}";
@@ -83,10 +85,12 @@
     // فتح المودال للتعديل
     // ==========================
     function openEditModal(btn) {
-        modalTitle.innerText = 'تعديل القسم';
+        modalTitle.innerText = '{{ __('admin.edit_category') }}';
 
-        nameInput.value = btn.dataset.name || '';
-        descInput.value = btn.dataset.description || '';
+        nameEnInput.value = btn.dataset.name_en || '';
+        nameArInput.value = btn.dataset.name_ar || '';
+        descEnInput.value = btn.dataset.description_en || '';
+        descArInput.value = btn.dataset.description_ar || '';
 
         if (window.CKEDITOR && CKEDITOR.instances.editor) {
             CKEDITOR.instances.editor.setData(btn.dataset.description || '');
@@ -209,7 +213,7 @@
                 })
                 .catch(() => {
                     // تقدر تعرض Toast خطأ هنا لو عندك util
-                    console.error('Search failed');
+                    console.error('{{ __('admin.search_failed') }}');
                 })
                 .finally(() => {
                     if (input) input.disabled = false;

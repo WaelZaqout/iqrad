@@ -1,71 +1,16 @@
 <!-- Investment Opportunities Section -->
 <h3 class="section-title">{{ __('auth.investment_opportunities') }}</h3>
+<!-- Projects Grid -->
+<div id="projects-container" class="project-cards-container">
+    <!-- Project 1 -->
+    @include('front.partials.projects-cards', ['projects' => $projects])
 
-<div class="investment-cards-container">
-    @foreach ($projects as $project)
-        <!-- Investment Opportunity 1 -->
-        <div class="investment-card">
-            <div class="project-tags">
-                <span class="status-badge {{ $project->status_badge['class'] }}">
-                    {{ $project->status_badge['label'] }}
-                </span>
-            </div>
-            <div class="project-header">
-                <h4 class="project-title">{{ $project->title }}</h4>
-                <span class="sector-badge">{{ $project->category->name }}</span>
-            </div>
-            <div class="return-percentage">{{ $project->interest_rate }} %</div>
-            <div class="project-details">
-                <div class="detail-item">
-                    <span class="detail-label">{{ __('auth.duration') }}</span>
-                    <span class="detail-value"> {{ $project->term_months }} {{ __('auth.month') }} </span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">{{ __('auth.minimum') }}</span>
-                    <span class="detail-value">{{ number_format($project->min_investment) }}
-                        {{ __('auth.riyal') }}</span>
-                </div>
-            </div>
-
-            @php
-                $percentage =
-                    $project->funding_goal > 0 ? round(($project->funded_amount / $project->funding_goal) * 100) : 0;
-                $isCompleted = $project->funded_amount >= $project->funding_goal;
-            @endphp
-
-            <div class="progress-wrapper">
-                <div class="progress-header">
-                    <span class="progress-percentage">{{ __('auth.funding_percentage') }}: {{ $percentage }}%</span>
-                    <span class="progress-amount">{{ number_format($project->funded_amount) }} {{ __('auth.from') }}
-                        {{ number_format($project->funding_goal) }} {{ __('auth.riyal') }}</span>
-                </div>
-
-                <div class="progress-bar-container" role="progressbar" aria-valuenow="{{ $percentage }}"
-                    aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar-fill" data-percentage="{{ $percentage }}"></div>
-                </div>
-            </div>
-
-            <div class="investment-card-footer">
-
-                <a href="{{ route('details', $project->id) }}" class="btn btn-details">
-                    <i class="fas fa-eye me-1"></i> {{ __('auth.details') }}
-                </a>
-
-                @if (!$isCompleted)
-                    <button class="btn btn-invest"
-                        onclick="event.stopPropagation(); openInvestModal({{ $project->id }}, '{{ $project->title }}', {{ $project->min_investment }}, {{ $project->interest_rate }})">
-                        <i class="fas fa-hand-holding-usd me-1"></i> {{ __('auth.invest_now') }}
-                    </button>
-                @else
-                    <button class="btn btn-secondary" disabled>
-                        <i class="fas fa-check me-1"></i> {{ __('auth.investment_completed') }}
-                    </button>
-                @endif
-            </div>
-        </div>
-    @endforeach
-
+    <div class="load-more-wrapper">
+        <a href="{{ route('project') }}" class="load-more-btn">
+            <i class="fas fa-layer-group"></i>
+            {{ __('auth.more_projects') }}
+        </a>
+    </div>
 </div>
 
 <!-- Profit Summary Section -->
@@ -230,149 +175,166 @@
     </div>
 </div>
 
-<!-- Support Chat Section -->
-<h3 class="section-title">{{ __('auth.support_and_chat') }}</h3>
+<h3 class="section-title">الدعم والدردشة</h3>
 <div
     style="background: white; border-radius: 24px; padding: 2rem; box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;">
     <div class="d-flex align-items-center mb-4">
         <div class="avatar me-3" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">اد</div>
         <div>
-            <h5 class="mb-0" style="color: #0f172a;">{{ __('auth.financial_support_management') }}</h5>
-            <small class="text-success"><i class="fas fa-circle me-1"></i> {{ __('auth.online_now') }}</small>
-        </div>
-        <div class="ms-auto">
-            <button class="btn btn-primary px-4 py-2">
-                <i class="fas fa-comment-dots me-2"></i> {{ __('auth.start_new_chat') }}
-            </button>
+            <h5 class="mb-0">الدعم الفني</h5>
+            <small class="text-success"><i class="fas fa-circle me-1"></i> Online</small>
         </div>
     </div>
+
     <div
         style="min-height: 250px; max-height: 350px; overflow-y: auto; padding: 1.5rem; background: #f8fafc; border-radius: 18px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-        <div class="chat-message message-received">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.financial_support_management') }}</strong>
-                <small class="text-muted">10:30</small>
-            </div>
-            <p class="mb-0">{{ __('auth.support_received_message') }}</p>
-        </div>
-        <div class="chat-message message-sent">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.you') }}</strong>
-                <small class="text-white-50">10:28</small>
-            </div>
-            <p class="mb-0">{{ __('auth.financial_support_inquiry') }}</p>
-        </div>
-        <div class="chat-message message-received">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.financial_support_management') }}</strong>
-                <small class="text-muted">09:15</small>
-            </div>
-            <p class="mb-0">{{ __('auth.project_status_response') }}</p>
-        </div>
+        @if ($conversation)
+            @foreach ($conversation->messages as $msg)
+                <div class="chat-message {{ $msg->sender_id == auth()->id() ? 'message-sent' : 'message-received' }}">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong>{{ $msg->sender_id == auth()->id() ? 'أنت' : 'الدعم' }}</strong>
+                        <small class="text-muted">{{ $msg->created_at->format('H:i') }}</small>
+                    </div>
+                    <p class="mb-0">{{ $msg->message }}</p>
+                </div>
+            @endforeach
+        @else
+            <p class="text-center text-muted">لم تبدأ أي محادثة بعد.</p>
+        @endif
     </div>
-    <div class="input-group">
-        <input type="text" class="form-control py-3" placeholder="{{ __('auth.type_message') }}">
-        <button class="btn btn-outline-secondary py-3 px-3" title="{{ __('auth.upload_file') }}">
-            <i class="fas fa-paperclip"></i>
-        </button>
-        <button class="btn btn-primary py-3 px-4">
-            <i class="fas fa-paper-plane"></i>
-        </button>
-    </div>
+
+    <form action="{{ route('support.sendMessage') }}" method="POST" class="input-group">
+        @csrf
+        <input type="hidden" name="conversation_id" value="{{ $conversation?->id }}">
+        <input type="text" name="message" class="form-control py-3" placeholder="اكتب رسالتك هنا">
+        <button class="btn btn-primary py-3 px-4"><i class="fas fa-paper-plane"></i></button>
+    </form>
 </div>
-<!-- Payment Modal -->
-<div id="investModal" class="modern-modal">
-    <div class="modern-modal-content">
-        <span class="close-btn" onclick="closeInvestModal()">&times;</span>
 
-        <h2 class="modal-title">{{ __('auth.invest_in_project') }}</h2>
-
-        <div class="modal-project-name d-flex align-items-center mb-4">
-            <i class="fas fa-project-diagram me-3 text-primary fs-2"></i>
+<!-- Invest Modal -->
+<div id="investModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3 style="font-weight: 800; font-size: 1.5rem; color: var(--gray-900);">
+                {{ __('auth.invest_project') }}</h3>
+            <button class="close-modal" onclick="closeModal('investModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div
+            style="background: var(--bg-light); padding: 1.25rem; border-radius: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; border: 1px solid var(--border);">
+            <div
+                style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <i class="fas fa-project-diagram"></i>
+            </div>
             <div>
-                <h5 class="mb-1 text-muted">{{ __('auth.project_name') }}:</h5>
-                <h4 id="projectName" class="mb-0 text-primary fw-bold"
-                    style="text-shadow: 1px 1px 2px rgba(0,0,0,0.1);"></h4>
+                <div style="font-size: 0.85rem; color: var(--gray-500); font-weight: 600;">
+                    {{ __('auth.project_name') }}</div>
+                <div id="modalProjectName" style="font-weight: 800; font-size: 1.1rem; color: var(--gray-900);">
+                </div>
             </div>
         </div>
-
         <div class="form-group">
-            <label>{{ __('auth.investment_amount_label') }} ({{ __('auth.minimum_amount') }} <span
-                    id="minAmount"></span> {{ __('auth.riyal') }})</label>
-            <input type="number" id="investAmount" min="1000" placeholder="1000" value="1000"
-                oninput="calculateReturn()">
+            <label class="form-label">{{ __('auth.investment_amount') }} <span id="modalMinInvest"
+                    style="color:var(--primary)"></span> {{ __('auth.riyal') }})</label>
+            <div style="position: relative;">
+                <input type="number" id="investAmountModal" class="form-control" oninput="calculateReturn()"
+                    style="padding-left: 3rem; font-weight: bold; font-size: 1.2rem;">
+                <span
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-weight: bold;">SAR</span>
+            </div>
         </div>
-
         <div class="form-group">
-            <label>{{ __('auth.expected_return_label') }}</label>
-            <input type="text" id="expectedReturn" readonly>
+            <label class="form-label">{{ __('auth.expected_monthly_return') }}</label>
+            <input type="text" id="expectedReturnModal" class="form-control" readonly
+                style="background: var(--gray-100); color: var(--primary-dark); font-weight: 800;">
         </div>
-
-        <button class="primary-btn" onclick="redirectToStripe()">{{ __('auth.complete_payment') }}</button>
+        <button onclick="redirectToStripe()" class="btn btn-primary" style="width: 100%; padding: 1.25rem;">
+            <i class="fas fa-lock"></i> {{ __('auth.secure_payment') }}
+        </button>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--gray-400); margin-top: 1rem;"><i
+                class="fas fa-shield-alt"></i> {{ __('auth.transactions_secure') }}</p>
     </div>
 </div>
+
 <script>
-    // Translation strings
-    const translations = {
-        monthlyReturn: @json(__('auth.monthly_return')),
-        minimumInvestmentAlert: @json(__('auth.minimum_investment_alert')),
-        riyal: @json(__('auth.riyal')),
-        investmentError: @json(__('auth.investment_error')),
-        serverError: @json(__('auth.server_error')),
-        capital: @json(__('auth.capital')),
-        receivedProfits: @json(__('auth.received_profits')),
-        expectedProfits: @json(__('auth.expected_profits'))
-    };
-
     let selectedProjectId = null;
-    let projectReturn = 0;
     let minInvestment = 0;
+    let annualRate = 0;
 
-    function openInvestModal(id, name, minAmount, annualReturn) {
-        selectedProjectId = id;
-        projectReturn = annualReturn;
-        minInvestment = minAmount;
+    function openInvestModal(button) {
 
-        document.getElementById("projectName").textContent = name;
-        document.getElementById("minAmount").textContent = minAmount;
+        // قراءة بيانات المشروع من الزر
+        selectedProjectId = button.dataset.id;
+        minInvestment = parseFloat(button.dataset.min);
+        annualRate = parseFloat(button.dataset.rate);
+        const projectName = button.dataset.title;
 
-        document.getElementById("investAmount").min = minAmount;
-        document.getElementById("investAmount").value = minAmount;
+        // اسم المشروع
+        document.getElementById('modalProjectName').textContent = projectName;
 
+        // كتابة الحد الأدنى في النص
+        document.getElementById('modalMinInvest').textContent =
+            minInvestment.toLocaleString();
+
+        // كتابة الحد الأدنى داخل الحقل
+        const input = document.getElementById('investAmountModal');
+        input.min = minInvestment;
+        input.value = minInvestment;
+
+        // حساب أولي
         calculateReturn();
 
-        document.getElementById("investModal").style.display = "flex";
-    }
-
-    function closeInvestModal() {
-        document.getElementById("investModal").style.display = "none";
+        // فتح المودال
+        openModal('investModal');
     }
 
     function calculateReturn() {
-        let amount = document.getElementById("investAmount").value;
-        if (amount < minInvestment) {
-            document.getElementById("investAmount").value = minInvestment;
-            amount = minInvestment;
-        }
-        let annual = (amount * projectReturn) / 100;
-        let monthly = annual / 12;
+        const input = document.getElementById('investAmountModal');
+        let amount = parseFloat(input.value);
 
-        document.getElementById("expectedReturn").value =
-            monthly.toFixed(2) + " " + translations.monthlyReturn;
+        // لو فاضي أو أقل من الحد الأدنى
+        if (!amount || amount < minInvestment) {
+            amount = minInvestment;
+            input.value = minInvestment;
+        }
+
+        // حساب العائد الشهري
+        const monthlyReturn = (amount * (annualRate / 100)) / 12;
+
+
+        document.getElementById('expectedReturnModal').value =
+            monthlyReturn.toFixed(2) + ' {{ __('auth.sar_month') }} ';
     }
 
-    function redirectToStripe() {
-        let amount = document.getElementById("investAmount").value;
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('open'), 10);
+    }
 
-        if (amount < minInvestment) {
-            alert(translations.minimumInvestmentAlert + " " + minInvestment + " " + translations.riyal);
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('open');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+</script>
+
+<script>
+    function redirectToStripe() {
+
+        // جلب المبلغ من نفس input في المودال
+        let amount = parseFloat(
+            document.getElementById("investAmountModal").value
+        );
+
+        // حماية إضافية
+        if (!amount || amount < minInvestment) {
+            alert("مبلغ الاستثمار يجب أن يكون على الأقل " + minInvestment + " ريال");
             return;
         }
 
-        // 1️⃣ تسجيل الاستثمار في قاعدة البيانات قبل الدفع
+        // 1️⃣ حفظ الاستثمار
         fetch("/investments/store", {
                 method: "POST",
-
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
@@ -387,18 +349,16 @@
             .then(response => {
                 if (response.success) {
 
-                    let investmentId = response.investment_id;
-
-                    // 2️⃣ تحويل المستخدم لصفحة الدفع في Stripe
-                    window.location.href = "/checkout-stripe/" + investmentId;
+                    // 2️⃣ تحويل إلى Stripe
+                    window.location.href = "/checkout-stripe/" + response.investment_id;
 
                 } else {
-                    alert(translations.investmentError);
+                    alert("حدث خطأ أثناء حفظ الاستثمار، حاول مرة أخرى.");
                 }
             })
             .catch(err => {
                 console.error(err);
-                alert(translations.serverError);
+                alert("مشكلة في الاتصال بالسيرفر.");
             });
     }
 </script>

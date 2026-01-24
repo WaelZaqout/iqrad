@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             if (!Schema::hasColumn('projects', 'image')) {
-                $table->string('image')->nullable()->after('description');
+                $table->string('image')->nullable()->after('description_ar');
             }
         });
     }

@@ -23,11 +23,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $categories = Category::orderBy('name')->get();
-        View::share('categories', $categories);
         // ✅ تفعيل اللغة حسب الجلسة
         if (Session::has('locale')) {
             App::setLocale(Session::get('locale'));
         }
+
+        // تحديد العمود المناسب للترتيب حسب اللغة
+        $locale = App::getLocale(); // 'en' أو 'ar'
+        $categories = Category::orderBy('name_' . $locale, 'asc')->get();
+
+        // مشاركة المتغير مع كل الفيوهات
+        View::share('categories', $categories);
     }
 }

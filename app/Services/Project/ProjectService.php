@@ -18,7 +18,7 @@ class ProjectService
 
             $data['borrower_id'] = $borrowerId;
             $data['status'] ??= ProjectStatus::Pending;
-            $data['slug'] = $this->generateSlug($data['title']);
+            $data['slug'] = $this->generateSlug($data['title_en']);
 
             $project = Project::create(collect($data)->except(['image', 'gallery'])->toArray());
 
@@ -52,8 +52,8 @@ class ProjectService
         return DB::transaction(function () use ($project, $data) {
 
             // تحديث الـ slug عند تغيير العنوان
-            if (!empty($data['title']) && $data['title'] !== $project->title) {
-                $data['slug'] = $this->generateSlug($data['title'], $project->id);
+            if (!empty($data['title_en']) && $data['title_en'] !== $project->title_en) {
+                $data['slug'] = $this->generateSlug($data['title_en'], $project->id);
             }
 
             // تحديث البيانات الأساسية

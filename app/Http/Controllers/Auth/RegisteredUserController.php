@@ -56,8 +56,8 @@
         {
             return match ($role) {
                 'admin' => '/admin/dashboard',
-                'borrower' => '/borrower/dashboard',
-                'investor' => '/investor/dashboard',
+                'borrower' => '/dashboard',
+                'investor' => '/',
                 default => '/',
             };
         }

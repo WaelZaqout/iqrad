@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use App\Traits\HasLocale;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, HasLocale;
 
     protected $fillable = [
-        'name',
+        'name_en',
+        'name_ar',
         'slug',
         'image',
-        'description',
+        'description_en',
+        'description_ar',
     ];
 
     public function projects()
@@ -40,22 +43,30 @@ class Category extends Model
     public function scopeSearch($query, ?string $term)
     {
         if (!$term) return $query;
+        $locale = app()->getLocale(); // ar أو en
 
-        return $query->where(function ($q) use ($term) {
-            $q->where('name', 'like', "%{$term}%")
+        return $query->where(function ($q) use ($term, $locale) {
+            $q->where("name_{$locale}", 'like', "%{$term}%")
                 ->orWhereHas(
                     'parent',
                     fn($p) =>
-                    $p->where('name', 'like', "%{$term}%")
+                    $p->where("name_{$locale}", 'like', "%{$term}%")
                 );
         });
     }
 
+    public function getNameAttribute()
+    {
+        return $this->translate('name');
+    }
+    public function getDescriptionAttribute()
+    {
+        return $this->translate('description');
+    }
     public function deleteImages(): void
     {
         if ($this->image) {
             Storage::disk('public')->delete($this->image);
         }
     }
-
 }

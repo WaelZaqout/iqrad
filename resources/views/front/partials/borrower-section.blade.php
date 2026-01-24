@@ -1,145 +1,56 @@
 <!-- My Projects Section -->
-<h3 class="section-title">مشاريعي</h3>
+<h3 class="section-title">{{ __('auth.my_project') }}</h3>
 
-<div class="project-cards-container">
-    @foreach ($projects as $project)
-        <!-- Project 1 -->
-        <div class="project-card">
-            <div class="project-card-header">
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span class="project-tag tag-new">
-                            <i class="fas fa-bolt"></i> جديد
-                        </span>
-                    </div>
-                    <h4 class="project-title"> {{ $project->title }}</h4>
-                    <p class="project-date"><i class="fas fa-calendar me-2"></i> تاريخ التقديم:
-                        {{ $project->created_at->format('d M Y') }}</p>
-                </div>
+<!-- Projects Grid -->
+<div id="projects-container" class="project-cards-container">
+    <!-- Project 1 -->
+    @include('front.partials.projects-cards', ['projects' => $projects])
 
-                <span class="status-badge {{ $project->status_badge['class'] }}">
-                    {{ $project->status_badge['label'] }}
-                </span>
-
-            </div>
-
-            <div class="project-details">
-                <div class="detail-item">
-                    <span class="detail-label">نوع القطاع</span>
-                    <span class="sector-badge">{{ $project->category->name }}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">المبلغ المطلوب</span>
-                    <span class="detail-value">{{ $project->funding_goal }}</span>
-                </div>
-                {{-- <div class="detail-item">
-                <span class="detail-label">الضمان</span>
-                <span class="sector-badge">شخصي</span>
-            </div> --}}
-                <div class="detail-item">
-                    <span class="detail-label">مدة السداد</span>
-                    <span class="detail-value"> {{ $project->term_months }}شهر</span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-label">الحد الأدنى للاستثمار</span>
-                    <span class="detail-value">{{ number_format($project->min_investment) }} ريال</span>
-                </div>
-            </div>
-
-            @php
-                $percentage =
-                    $project->funding_goal > 0 ? round(($project->funded_amount / $project->funding_goal) * 100) : 0;
-            @endphp
-
-            <div class="progress-wrapper">
-                <div class="progress-header">
-                    <span class="progress-percentage">نسبة التمويل: {{ $percentage }}%</span>
-                    <span class="progress-amount">{{ number_format($project->funded_amount) }} من
-                        {{ number_format($project->funding_goal) }} ريال</span>
-                </div>
-
-                <div class="progress-bar-container" role="progressbar" aria-valuenow="{{ $percentage }}"
-                    aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar-fill" data-percentage="{{ $percentage }}"></div>
-                </div>
-            </div>
-
-
-            <div class="project-card-footer">
-                <a href="{{ route('details', $project->id) }}" class="btn btn-outline-secondary px-3 py-2">
-                    <i class="fas fa-eye me-1"></i> تفاصيل
-                </a>
-                <!-- زر تعديل المشروع -->
-                <button onclick="editProject(this)" data-id="{{ $project->id }}" data-title="{{ $project->title }}"
-                    data-category_id="{{ $project->category_id }}" data-funding_goal="{{ $project->funding_goal }}"
-                    data-term_months="{{ $project->term_months }}" data-interest_rate="{{ $project->interest_rate }}"
-                    data-min_investment="{{ $project->min_investment }}" data-summary="{{ $project->summary }}"
-                    data-description="{{ $project->description }}" data-bs-toggle="modal"
-                    data-bs-target="#fundingModal">تعديل</button>
-            </div>
-        </div>
-    @endforeach
-
+    <div class="load-more-wrapper">
+        <a href="{{ route('project') }}" class="load-more-btn">
+            <i class="fas fa-layer-group"></i>
+            {{ __('auth.more_projects') }}
+        </a>
+    </div>
 </div>
 
 
 <!-- Support Chat Section -->
 <h3 class="section-title">{{ __('auth.chat') }}</h3>
+
 <div
     style="background: white; border-radius: 24px; padding: 2rem; box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;">
     <div class="d-flex align-items-center mb-4">
         <div class="avatar me-3" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">اد</div>
         <div>
-            <h5 class="mb-0" style="color: #0f172a;">{{ __('auth.support_team') }}</h5>
-            <small class="text-success"><i class="fas fa-circle me-1"></i> {{ __('auth.online_now') }}</small>
-        </div>
-        <div class="ms-auto">
-            <button class="btn btn-primary px-4 py-2">
-                <i class="fas fa-comment-dots me-2"></i> {{ __('auth.start_new_chat') }}
-            </button>
+            <h5 class="mb-0">{{ __('auth.support_and_help') }}</h5>
+            <small class="text-success"><i class="fas fa-circle me-1"></i> Online</small>
         </div>
     </div>
+
     <div
         style="min-height: 250px; max-height: 350px; overflow-y: auto; padding: 1.5rem; background: #f8fafc; border-radius: 18px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-        <div class="chat-message message-received">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.system') }} </strong>
-                <small class="text-muted">10:30</small>
-            </div>
-            <p class="mb-0">{{ __('auth.welcome_message') }}</p>
-        </div>
-        <div class="chat-message message-received">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.support') }} </strong>
-                <small class="text-muted">10:30</small>
-            </div>
-            <p class="mb-0"> {{ __('auth.support_greeting') }}</p>
-        </div>
-        <div class="chat-message message-sent">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.you') }}</strong>
-                <small class="text-white-50">10:32</small>
-            </div>
-            <p class="mb-0"> {{ __('auth.support_greeting') }}</p>
-        </div>
-        <div class="chat-message message-received">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <strong>{{ __('auth.support') }} </strong>
-                <small class="text-muted">10:33</small>
-            </div>
-            <p class="mb-0">{{ __('auth.project_status_response') }}</p>
-        </div>
+        @if ($conversation)
+            @foreach ($conversation->messages as $msg)
+                <div class="chat-message {{ $msg->sender_id == auth()->id() ? 'message-sent' : 'message-received' }}">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong>{{ $msg->sender_id == auth()->id() ? __('auth.you') : __('auth.support') }}</strong>
+                        <small class="text-muted">{{ $msg->created_at->format('H:i') }}</small>
+                    </div>
+                    <p class="mb-0">{{ $msg->message }}</p>
+                </div>
+            @endforeach
+        @else
+            <p class="text-center text-muted">لم تبدأ أي محادثة بعد.</p>
+        @endif
     </div>
-    <div class="input-group">
-        <input type="text" class="form-control py-3" placeholder=" {{ __('auth.type_your_message') }}">
-        <button class="btn btn-outline-secondary py-3 px-3" title="  {{ __('auth.attach_file') }}">
-            <i class="fas fa-paperclip"></i>
-        </button>
-        <button class="btn btn-primary py-3 px-4">
-            <i class="fas fa-paper-plane"></i>
-        </button>
-    </div>
+
+    <form action="{{ route('support.sendMessage') }}" method="POST" class="input-group">
+        @csrf
+        <input type="hidden" name="conversation_id" value="{{ $conversation?->id }}">
+        <input type="text" name="message" class="form-control py-3" placeholder="اكتب رسالتك هنا">
+        <button class="btn btn-primary py-3 px-4"><i class="fas fa-paper-plane"></i></button>
+    </form>
 </div>
 
 <!-- Help Modal -->
@@ -218,8 +129,7 @@
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
@@ -227,37 +137,97 @@
                     enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="_method" id="formMethod" value="POST">
-                    <!-- title -->
-                    <div class="mb-4">
-                        <label for="title" class="form-label fw-bold">🏷️ اسم المشروع</label>
-                        <input type="text"
-                            class="form-control form-control-lg @error('title') is-invalid @enderror" id="title"
-                            name="title" value="{{ old('title') }}" required>
-                        @error('title')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
+
+                    <!-- ========================== Title EN / AR ========================== -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="title_en" class="form-label fw-bold">🏷️
+                                {{ __('auth.project_name_en') }}</label>
+                            <input type="text"
+                                class="form-control form-control-lg @error('title_en') is-invalid @enderror"
+                                id="title_en" name="title_en" value="{{ old('title_en') }}" required>
+                            @error('title_en')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="title_ar" class="form-label fw-bold">🏷️
+                                {{ __('auth.project_name_ar') }}</label>
+                            <input type="text"
+                                class="form-control form-control-lg @error('title_ar') is-invalid @enderror"
+                                id="title_ar" name="title_ar" value="{{ old('title_ar') }}" required>
+                            @error('title_ar')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
-                    <!-- category + funding_goal -->
-                    <div class="row mb-4">
+                    <!-- ========================== Summary EN / AR ========================== -->
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="category_id" class="form-label fw-bold">🏭 نوع القطاع</label>
+                            <label for="summary_en" class="form-label fw-bold">🖋️
+                                {{ __('auth.summary_en') }}</label>
+                            <textarea class="form-control @error('summary_en') is-invalid @enderror" id="summary_en" name="summary_en"
+                                rows="3" required>{{ old('summary_en') }}</textarea>
+                            @error('summary_en')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="summary_ar" class="form-label fw-bold">🖋️
+                                {{ __('auth.summary_ar') }}</label>
+                            <textarea class="form-control @error('summary_ar') is-invalid @enderror" id="summary_ar" name="summary_ar"
+                                rows="3" required>{{ old('summary_ar') }}</textarea>
+                            @error('summary_ar')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- ========================== Description EN / AR ========================== -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="description_en" class="form-label fw-bold">📄
+                                {{ __('auth.description_en') }}</label>
+                            <textarea class="form-control @error('description_en') is-invalid @enderror" id="description_en"
+                                name="description_en" rows="5">{{ old('description_en') }}</textarea>
+                            @error('description_en')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="description_ar" class="form-label fw-bold">📄
+                                {{ __('auth.description_ar') }}</label>
+                            <textarea class="form-control @error('description_ar') is-invalid @enderror" id="description_ar"
+                                name="description_ar" rows="5">{{ old('description_ar') }}</textarea>
+                            @error('description_ar')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- ========================== Category + Funding Goal ========================== -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="category_id" class="form-label fw-bold">{{ __('auth.sector_label') }}</label>
                             <select class="form-select form-select-lg @error('category_id') is-invalid @enderror"
                                 id="category_id" name="category_id" required>
-                                <option value="">اختر القطاع</option>
+                                <option value="">{{ __('auth.select_sector') }}</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
                                         {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}</option>
+                                        {{ $category->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('category_id')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="col-md-6">
-                            <label for="funding_goal" class="form-label fw-bold">💰 المبلغ المطلوب (ريال)</label>
+                            <label for="funding_goal"
+                                class="form-label fw-bold">{{ __('auth.funding_amount') }}</label>
                             <input type="number"
                                 class="form-control form-control-lg @error('funding_goal') is-invalid @enderror"
                                 id="funding_goal" name="funding_goal" min="1000"
@@ -268,98 +238,75 @@
                         </div>
                     </div>
 
-                    <!-- term + interest -->
-                    <div class="row mb-4">
+                    <!-- ========================== Term + Interest + Min Investment ========================== -->
+                    <div class="row mb-3">
                         <div class="col-md-4">
-                            <label for="term_months" class="form-label fw-bold">⏳ مدة السداد (أشهر)</label>
+                            <label for="term_months"
+                                class="form-label fw-bold">{{ __('auth.repayment_term') }}</label>
                             <select class="form-select form-select-lg @error('term_months') is-invalid @enderror"
                                 id="term_months" name="term_months" required>
-                                <option value="">اختر المدة</option>
-                                <option value="6" {{ old('term_months') == 6 ? 'selected' : '' }}>6 أشهر</option>
-                                <option value="12" {{ old('term_months') == 12 ? 'selected' : '' }}>12 شهر
-                                </option>
-                                <option value="18" {{ old('term_months') == 18 ? 'selected' : '' }}>18 شهر
-                                </option>
-                                <option value="24" {{ old('term_months') == 24 ? 'selected' : '' }}>24 شهر
-                                </option>
-                                <option value="36" {{ old('term_months') == 36 ? 'selected' : '' }}>36 شهر
-                                </option>
+                                <option value="">{{ __('auth.select_term') }}</option>
+                                @for ($i = 6; $i <= 36; $i += 6)
+                                    <option value="{{ $i }}"
+                                        {{ old('term_months') == $i ? 'selected' : '' }}>{{ $i }}
+                                        {{ __('auth.month') }}</option>
+                                @endfor
                             </select>
                             @error('term_months')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
-
-
                         <div class="col-md-4">
-                            <label for="interest_rate" class="form-label fw-bold">📊 نسبة الفائدة (%)</label>
+                            <label for="interest_rate" class="form-label fw-bold">📊 {{ __('auth.interest_rate') }}
+                                (%)</label>
                             <input type="number" step="0.01"
                                 class="form-control form-control-lg @error('interest_rate') is-invalid @enderror"
-                                id="interest_rate" name="interest_rate" placeholder="مثال: 12" min="1"
-                                max="50" value="{{ old('interest_rate') }}" required>
+                                id="interest_rate" name="interest_rate" placeholder="{{ __('auth.example') }}: 12"
+                                min="1" max="50" value="{{ old('interest_rate') }}" required>
                             @error('interest_rate')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="min_investment" class="form-label fw-bold">📊 الحد الادنى للاستثمار
-                                (ريال)</label>
+                            <label for="min_investment" class="form-label fw-bold">📊
+                                {{ __('auth.minimum_investment') }} ({{ __('auth.sar') }})</label>
                             <input type="number" step="0.01"
                                 class="form-control form-control-lg @error('min_investment') is-invalid @enderror"
-                                id="min_investment" name="min_investment" placeholder="مثال: 12" min="1000"
-                                max="5000000" value="{{ old('min_investment') }}" required>
+                                id="min_investment" name="min_investment" min="1000" max="5000000"
+                                value="{{ old('min_investment') }}" required>
                             @error('min_investment')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
-
-
-                    <!-- summary -->
-                    <div class="mb-4">
-                        <label for="summary" class="form-label fw-bold">🖋️ وصف مختصر للمشروع</label>
-                        <textarea class="form-control form-control-lg @error('summary') is-invalid @enderror" id="summary" name="summary"
-                            rows="3" required>{{ old('summary') }}</textarea>
-                        @error('summary')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
+                    <!-- ========================== Image + Gallery ========================== -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="projectImage" class="form-label fw-bold">🖼️
+                                {{ __('auth.project_image') }}</label>
+                            <input type="file" class="form-control @error('image') is-invalid @enderror"
+                                id="projectImage" name="image" accept="image/*">
+                            @error('image')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="projectGallery" class="form-label fw-bold">🖼️
+                                {{ __('auth.project_gallery') }}</label>
+                            <input type="file" class="form-control @error('gallery') is-invalid @enderror"
+                                id="projectGallery" name="gallery[]" multiple accept="image/*">
+                            @error('gallery.*')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
-                    <!-- description -->
-                    <div class="mb-4">
-                        <label for="description" class="form-label fw-bold">📄 وصف تفصيلي (اختياري)</label>
-                        <textarea class="form-control form-control-lg @error('description') is-invalid @enderror" id="description"
-                            name="description" rows="5">{{ old('description') }}</textarea>
-                        @error('description')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Image -->
-                    <div class="mb-4">
-                        <label for="projectImage" class="form-label fw-bold">🖼️ رفع صورة المشروع (اختياري)</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror"
-                            id="projectImage" name="image" accept="image/*">
-                        @error('image')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Gallery -->
-                    <div class="mb-4">
-                        <label for="projectGallery" class="form-label fw-bold">🖼️ رفع صور المشروع (اختياري)</label>
-                        <input type="file" class="form-control @error('gallery') is-invalid @enderror"
-                            id="projectGallery" name="gallery[]" multiple accept="image/*">
-                        @error('gallery.*')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">إرسال طلب
-                        التمويل</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
+                        {{ __('auth.submit_funding_request') }}
+                    </button>
                 </form>
+
 
             </div>
         </div>
@@ -416,24 +363,30 @@
     function editProject(button) {
         const form = document.getElementById('projectForm');
         const id = button.getAttribute('data-id');
-        const title = button.getAttribute('data-title');
+        const title_en = button.getAttribute('data-title_en');
+        const title_ar = button.getAttribute('data-title_ar');
         const category_id = button.getAttribute('data-category_id');
         const funding_goal = button.getAttribute('data-funding_goal');
         const term_months = button.getAttribute('data-term_months');
         const interest_rate = button.getAttribute('data-interest_rate');
         const min_investment = button.getAttribute('data-min_investment');
-        const summary = button.getAttribute('data-summary');
-        const description = button.getAttribute('data-description');
+        const summary_en = button.getAttribute('data-summary_en');
+        const summary_ar = button.getAttribute('data-summary_ar');
+        const description_en = button.getAttribute('data-description_en');
+        const description_ar = button.getAttribute('data-description_ar');
 
         // ملء الحقول
-        document.getElementById('title').value = title;
+        document.getElementById('title_en').value = title_en;
+        document.getElementById('title_ar').value = title_ar;
         document.getElementById('category_id').value = category_id;
         document.getElementById('funding_goal').value = funding_goal;
         document.getElementById('term_months').value = term_months;
         document.getElementById('interest_rate').value = interest_rate;
         document.getElementById('min_investment').value = min_investment;
-        document.getElementById('summary').value = summary;
-        document.getElementById('description').value = description;
+        document.getElementById('summary_en').value = summary_en;
+        document.getElementById('summary_ar').value = summary_ar;
+        document.getElementById('description_en').value = description_en;
+        document.getElementById('description_ar').value = description_ar;
 
         // تغيير action للفورم ليصبح PUT
         form.action = `/projects/${id}`;
@@ -447,5 +400,8 @@
         document.getElementById('successModal').querySelector('h3').innerText = 'تم تعديل المشروع بنجاح!';
         document.getElementById('successModal').querySelector('p').innerText =
             'تم تعديل المشروع بنجاح! بانتظار الموافقة.';
+        var modal = new bootstrap.Modal(document.getElementById('fundingModal'));
+        modal.show();
+
     }
 </script>

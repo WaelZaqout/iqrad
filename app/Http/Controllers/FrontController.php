@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\Category;
 use App\Models\Investment;
 use Illuminate\Http\Request;
+use App\Models\SupportConversation;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -24,7 +25,8 @@ class FrontController extends Controller
     public function index()
     {
         // جميع المشاريع
-        $categories = Category::orderBy('name')->get();
+        $locale = app()->getLocale(); // 'en' أو 'ar'
+        $categories = Category::orderBy('name_' . $locale)->get();
         $projects = Project::with('category')->get();
         $investments = Investment::with('project')->get(); // جلب كل الاستثمارات مع المشروع
         $reviews = Review::with(['user', 'project'])
@@ -32,9 +34,10 @@ class FrontController extends Controller
             ->take(10) // عدد الآراء في الصفحة الرئيسية
             ->get();
         // مجموع التمويل الفعلي والهدف لكل المشاريع
-        $fundedAmount = $projects->sum('funded_amount');
-        $fundingGoal  = $projects->sum('funding_goal');
-        $percentage   = $fundingGoal > 0 ? round(($fundedAmount / $fundingGoal) * 100) : 0;
+            $fundedAmount = $projects->sum('funded_amount');
+            $fundingGoal  = $projects->sum('funding_goal');
+
+
         // حالات المشاريع
         $activeProjects    = $projects->where('status', 'active')->count();
         $pendingProjects    = $projects->where('status', 'pending')->count();
@@ -120,7 +123,6 @@ class FrontController extends Controller
         return view('front.index', compact(
             'categories',
             'projects',
-            'percentage',
             'statusStyles',
             'activeProjects',
             'notifications',
@@ -148,12 +150,17 @@ class FrontController extends Controller
     public function dashboard()
     {
         // جميع المشاريع
-        $projects = Project::with('category')->get();
+        $projects = Project::with('category')
+            ->visibleTo(Auth::user())
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         // مجموع التمويل الفعلي والهدف لكل المشاريع
         $fundedAmount = $projects->sum('funded_amount');
         $fundingGoal  = $projects->sum('funding_goal');
         $percentage   = $fundingGoal > 0 ? round(($fundedAmount / $fundingGoal) * 100) : 0;
+
         // حالات المشاريع
         $activeProjects    = $projects->where('status', 'active')->count();
         $pendingProjects    = $projects->where('status', 'pending')->count();
@@ -167,7 +174,8 @@ class FrontController extends Controller
 
         // نسبة الإنجاز
 
-        $categories = Category::orderBy('name')->get();
+        $locale = app()->getLocale(); // 'en' أو 'ar'
+        $categories = Category::orderBy('name_' . $locale)->get();
 
         // --- الحسابات المالية ---
         $investments = Investment::with('project')->get(); // جلب كل الاستثمارات مع المشروع
@@ -176,9 +184,15 @@ class FrontController extends Controller
         $totalCapital = $investments->sum('amount');
 
         // الأرباح المستلمة (status = paid)
-        $receivedProfits = $investments->where('status', 'paid')->sum(function ($inv) {
-            return $inv->amount * $inv->project->interest_rate / 100;
-        });
+        $receivedProfits = $investments->where('status', 'paid')
+            ->sum(function ($inv) {
+                return $inv->amount * $inv->project->interest_rate / 100;
+            });
+        $upcomingPayments = $investments
+            ->where('investor_id', auth()->id())
+            ->where('status', 'pending')
+            ->sum(fn($i) => $i->amount * ($i->project->interest_rate / 100));
+
 
         // الأرباح المتوقعة (status = pending)
         $expectedProfits = $investments->where('status', 'pending')->sum(function ($inv) {
@@ -192,11 +206,16 @@ class FrontController extends Controller
                 ->sum('amount');
         }
 
+        $conversation = SupportConversation::latest()
+            ->where('user_id', auth()->id())
+            ->first();
         return view('front.dashboard', compact(
             'categories',
             'projects',
+            'conversation',
             'percentage',
             'activeProjects',
+            'upcomingPayments',
             'pendingProjects',
             'completedProjects',
             'fundedProjects',
@@ -335,8 +354,13 @@ class FrontController extends Controller
     public function project()
     {
         // جميع المشاريع
-        $categories = Category::orderBy('name')->get();
-        $projects = Project::with('category')->get();
+        $locale = app()->getLocale(); // 'en' أو 'ar'
+        $categories = Category::orderBy('name_' . $locale)->get();
+        $projects = Project::with('category')
+            ->visibleTo(Auth::user())
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
 
         // مجموع التمويل الفعلي والهدف لكل المشاريع
@@ -378,7 +402,8 @@ class FrontController extends Controller
             ],
         ];
 
-        $categories = Category::orderBy('name')->get();
+        $locale = app()->getLocale(); // 'en' أو 'ar'
+        $categories = Category::orderBy('name_' . $locale)->get();
 
         // --- الحسابات المالية ---
         $investments = Investment::with('project')->get(); // جلب كل الاستثمارات مع المشروع
@@ -501,5 +526,19 @@ class FrontController extends Controller
                 'response' => 'حدث خطأ في السيرفر: ' . $e->getMessage()
             ], 500);
         }
+    }
+    public function filter(Request $request)
+    {
+        $status = $request->status;
+
+        $projects = Project::when($status !== 'all', function ($query) use ($status) {
+            if ($status === 'completed') {
+                $query->where('status', 'completed');
+            } else {
+                $query->where('status', $status);
+            }
+        })->latest()->get();
+
+        return view('front.partials.projects-cards', compact('projects'))->render();
     }
 }

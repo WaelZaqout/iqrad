@@ -22,7 +22,8 @@ class ProjectController extends Controller
      */
     public function index(Request $request, ProjectListService $service, ProjectService $projectService)
     {
-        $projects = $service->execute($request);
+        $projects = $service->execute($request, true);
+
         $stats = $projectService->getStats();
 
         if ($request->ajax()) {

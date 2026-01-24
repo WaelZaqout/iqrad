@@ -31,811 +31,14 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
     <link rel="stylesheet" href="{{ asset('assets/front/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/front/css/styles.media.css') }}">
+    @if (App::getLocale() == 'en')
+        <link rel="stylesheet" href="{{ asset('assets/front/css/en.css') }}">
+    @endif
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('css')
-    @if (App::getLocale() == 'en')
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-            /* ============================================
-               ENGLISH LTR STYLES - Mirrored from styles.css
-               ============================================ */
-
-            * {
-                direction: ltr;
-            }
-
-            body {
-                direction: ltr;
-                text-align: left;
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                background-color: var(--bg-light);
-                color: var(--text-main);
-                line-height: 1.6;
-                overflow-x: hidden;
-                font-size: 16px;
-            }
-
-            a {
-                text-decoration: none;
-                color: inherit;
-                transition: 0.3s;
-            }
-
-            ul {
-                list-style: none;
-            }
-
-            /* Container & Grid System */
-            .container {
-                direction: ltr;
-                text-align: left;
-            }
-
-            /* Buttons Global - LTR */
-            .btn {
-                direction: ltr;
-                text-align: center;
-            }
-
-            .btn-primary {
-                direction: ltr;
-            }
-
-            .btn-outline {
-                direction: ltr;
-            }
-
-            .btn-purple {
-                direction: ltr;
-            }
-
-            /* Header Enhanced - LTR */
-            header {
-                direction: ltr;
-            }
-
-            .header-inner {
-                direction: ltr;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .logo {
-                direction: ltr;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
-
-            .logo-icon {
-                direction: ltr;
-            }
-
-            .logo-icon i {
-                direction: ltr;
-            }
-
-            .logo-text {
-                direction: ltr;
-            }
-
-            .header-actions {
-                direction: ltr;
-                display: flex;
-                gap: 1.5rem;
-                align-items: center;
-            }
-
-            .icon-btn {
-                direction: ltr;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .icon-btn i {
-                direction: ltr;
-            }
-
-            /* Notification badge position for LTR */
-            .icon-btn.position-relative .position-absolute {
-                left: auto;
-                right: 0;
-                top: 0;
-                transform: translate(50%, -50%);
-            }
-
-            .icon-btn.position-relative .position-absolute.start-100 {
-                left: auto;
-                right: 0;
-            }
-
-            .user-profile {
-                direction: ltr;
-                padding: 6px 8px 6px 16px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .user-profile .hidden-mobile {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .user-avatar-circle {
-                direction: ltr;
-                order: 1;
-            }
-
-            .user-profile i.fa-chevron-down {
-                direction: ltr;
-                order: 2;
-                margin-left: 0;
-                margin-right: 0;
-            }
-
-            /* Dropdown icons in header */
-            .dropdown-menu i {
-                direction: ltr;
-                margin-right: 0.5rem;
-                margin-left: 0;
-            }
-
-            .dropdown-item i {
-                direction: ltr;
-            }
-
-            /* Language toggle and other header icons */
-            .header-actions .icon-btn i.fa-globe,
-            .header-actions .icon-btn i.fa-bell {
-                direction: ltr;
-            }
-
-            /* Hero Section - LTR */
-            .hero {
-                direction: ltr;
-            }
-
-            .hero::before {
-                left: -100px;
-                right: auto;
-            }
-
-            .hero-inner {
-                direction: ltr;
-                text-align: left;
-            }
-
-            @media(min-width: 992px) {
-                .hero-inner {
-                    flex-direction: row;
-                    justify-content: space-between;
-                    text-align: left;
-                }
-
-                .hero-content {
-                    text-align: left;
-                }
-            }
-
-            .hero h1 {
-                text-align: left;
-            }
-
-            .hero-lead {
-                text-align: left;
-            }
-
-            .hero-buttons {
-                direction: ltr;
-                justify-content: flex-start;
-            }
-
-            /* Stats Banner - LTR */
-            .stats-banner {
-                direction: ltr;
-                text-align: center;
-            }
-
-            .stat-item {
-                direction: ltr;
-            }
-
-            /* Search & Filter - LTR */
-            .search-section {
-                direction: ltr;
-            }
-
-            .search-controls {
-                direction: ltr;
-            }
-
-            .filters {
-                direction: ltr;
-                justify-content: center;
-            }
-
-            .filter-btn {
-                direction: ltr;
-            }
-
-            /* Project Cards - LTR */
-            .project-cards-container {
-                direction: ltr;
-            }
-
-            .project-card {
-                direction: ltr;
-            }
-
-            .project-thumbnail {
-                direction: ltr;
-            }
-
-            .project-header {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .project-title {
-                text-align: left;
-            }
-
-            .project-purpose {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .project-details {
-                direction: ltr;
-            }
-
-            .project-info {
-                direction: ltr;
-            }
-
-            .info-item {
-                direction: ltr;
-                text-align: center;
-            }
-
-            .info-label {
-                direction: ltr;
-            }
-
-            .info-value {
-                direction: ltr;
-            }
-
-            .progress-container {
-                direction: ltr;
-            }
-
-            .progress-header {
-                direction: ltr;
-            }
-
-            .progress-bar {
-                direction: ltr;
-            }
-
-            .progress-fill {
-                direction: ltr;
-            }
-
-            .card-actions {
-                direction: ltr;
-            }
-
-            .invest-btn {
-                direction: ltr;
-            }
-
-            .details-btn {
-                direction: ltr;
-            }
-
-            .status-badge {
-                left: 16px;
-                right: auto;
-            }
-
-            /* Trust & Testimonials - LTR */
-            .trust-section {
-                direction: ltr;
-            }
-
-            .trust-logos {
-                direction: ltr;
-            }
-
-            .testimonials-section {
-                direction: ltr;
-            }
-
-            .testimonials-slider {
-                direction: ltr;
-            }
-
-            .testimonial-card {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .user-avatar {
-                direction: ltr;
-            }
-
-            /* Education & FAQ - LTR */
-            .education-grid {
-                direction: ltr;
-            }
-
-            .edu-card {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .edu-icon {
-                direction: ltr;
-            }
-
-            .faq-item {
-                direction: ltr;
-            }
-
-            .faq-question {
-                direction: ltr;
-            }
-
-            .faq-answer {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .faq-toggle {
-                direction: ltr;
-            }
-
-            /* Footer - LTR */
-            footer {
-                direction: ltr;
-            }
-
-            .footer-grid {
-                direction: ltr;
-            }
-
-            .footer-title {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .footer-links {
-                direction: ltr;
-            }
-
-            .footer-links li {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .footer-links a {
-                direction: ltr;
-            }
-
-            .footer-links a:hover {
-                padding-left: 5px;
-                padding-right: 0;
-            }
-
-            /* Modals - LTR */
-            .modal-overlay {
-                direction: ltr;
-            }
-
-            .modal-box {
-                direction: ltr;
-            }
-
-            .modal-header {
-                direction: ltr;
-            }
-
-            .close-modal {
-                direction: ltr;
-            }
-
-            .modal-content {
-                direction: ltr;
-            }
-
-            .modal-content.auth-modal {
-                direction: ltr;
-            }
-
-            .modal-content.auth-modal .close {
-                right: 14px;
-                left: auto;
-            }
-
-            .form-group {
-                direction: ltr;
-            }
-
-            .form-label {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .form-control {
-                direction: ltr;
-                text-align: left;
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            }
-
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .form-row {
-                direction: ltr;
-            }
-
-            .stripe-notice {
-                direction: ltr;
-            }
-
-            .modal-image {
-                direction: ltr;
-            }
-
-            .modal-description {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .modal-details {
-                direction: ltr;
-            }
-
-            .detail-item {
-                direction: ltr;
-            }
-
-            .detail-label {
-                direction: ltr;
-            }
-
-            .detail-value {
-                direction: ltr;
-            }
-
-            .modal-section {
-                direction: ltr;
-            }
-
-            .auth-tabs {
-                direction: ltr;
-            }
-
-            .tab-btn {
-                direction: ltr;
-            }
-
-            .auth-body {
-                direction: ltr;
-            }
-
-            .auth-form {
-                direction: ltr;
-            }
-
-            .auth-form .form-group {
-                direction: ltr;
-            }
-
-            .auth-form .form-group label {
-                direction: ltr;
-                text-align: left;
-            }
-
-            .auth-form .form-group input {
-                direction: ltr;
-                text-align: left;
-            }
-
-            /* Chat Widget - LTR */
-            .chat-widget {
-                left: 2.5rem;
-                right: auto;
-            }
-
-            .chat-toggle-btn {
-                direction: ltr;
-            }
-
-            .chat-window {
-                left: 0;
-                right: auto;
-                transform-origin: bottom left;
-            }
-
-            .chat-msgs {
-                direction: ltr;
-            }
-
-            .chat-msg {
-                direction: ltr;
-            }
-
-            .msg-bot {
-                border-bottom-left-radius: 4px;
-                border-bottom-right-radius: 1.25rem;
-            }
-
-            .msg-user {
-                border-bottom-right-radius: 4px;
-                border-bottom-left-radius: 1.25rem;
-            }
-
-            /* Scroll to Top - LTR */
-            .scroll-to-top {
-                left: 32px;
-                right: auto;
-            }
-
-            /* Preloader - LTR */
-            #preloader {
-                direction: ltr;
-            }
-
-            .preloader-content {
-                direction: ltr;
-            }
-
-            .preloader-icon {
-                direction: ltr;
-            }
-
-            /* Notification Bar - LTR */
-            .notification-bar {
-                direction: ltr;
-                text-align: center;
-            }
-
-            .notification-bar i {
-                margin-right: 8px;
-                margin-left: 0;
-            }
-
-            .scrolling-text {
-                direction: ltr;
-            }
-
-            /* Dropdown menus - LTR */
-            .dropdown-menu {
-                left: 0 !important;
-                right: auto !important;
-                text-align: left;
-                direction: ltr;
-            }
-
-            .topbar .dropdown .dropdown-menu {
-                left: 0;
-                right: auto;
-                text-align: left;
-            }
-
-            /* Dropdown items with icons - LTR */
-            .dropdown-item {
-                direction: ltr;
-                text-align: left;
-                display: flex;
-                align-items: center;
-            }
-
-            .dropdown-item i {
-                margin-right: 0.5rem;
-                margin-left: 0;
-                order: -1;
-            }
-
-            .dropdown-item .me-2 {
-                margin-right: 0.5rem !important;
-                margin-left: 0 !important;
-            }
-
-            /* Notification dropdown items */
-            .dropdown-item.d-flex {
-                direction: ltr;
-            }
-
-            .dropdown-item.d-flex i {
-                order: -1;
-            }
-
-            /* Sidebar - LTR */
-            .sidebar {
-                direction: ltr;
-                padding: 0;
-                text-align: left;
-            }
-
-            .sidebar .nav-item .nav-link {
-                direction: ltr;
-                text-align: left;
-                margin-left: 0;
-                margin-right: 0;
-                font-weight: 600;
-                color: var(--gray-900);
-            }
-
-            .sidebar .nav-item .nav-link[data-toggle=collapse]::after {
-                float: right;
-                transform: rotate(0deg);
-            }
-
-            /* Menu - LTR */
-            .limiter-menu-desktop {
-                direction: ltr;
-                margin: 0 auto;
-                display: flex;
-                justify-content: center;
-            }
-
-            .main-menu {
-                direction: ltr;
-                padding: 0;
-                text-align: left;
-            }
-
-            /* Margins and padding - LTR */
-            .ml-auto {
-                margin-left: auto !important;
-                margin-right: 0 !important;
-            }
-
-            .mx-auto {
-                margin-left: auto !important;
-                margin-right: auto !important;
-            }
-
-            /* Project cards and thumbnails - LTR */
-            .item-slick1::before {
-                left: 0;
-                right: auto;
-                transform: scaleX(1);
-            }
-
-            .favorite-button {
-                padding-left: 230px;
-                padding-right: 0;
-            }
-
-            .thumbnails {
-                left: -110px;
-                right: auto;
-            }
-
-            .thumbnail img {
-                direction: ltr;
-            }
-
-            /* Header buttons and user dropdown - LTR */
-            .header-buttons {
-                direction: ltr;
-                justify-content: flex-start;
-                padding-left: 40px;
-                padding-right: 0;
-            }
-
-            .user-dropdown {
-                direction: ltr;
-                justify-content: flex-start;
-                padding-left: 40px;
-                padding-right: 0;
-            }
-
-            /* Fix icon alignment in header actions */
-            .header-actions>* {
-                display: flex;
-                align-items: center;
-            }
-
-            /* Separator in header */
-            .header-actions>div[style*="width: 1px"] {
-                margin-left: 0.25rem;
-                margin-right: 0.25rem;
-            }
-
-            /* Button in header */
-            .header-actions .btn {
-                direction: ltr;
-                white-space: nowrap;
-            }
-
-            .user-name-btn {
-                margin-right: 0;
-                margin-left: 10px;
-            }
-
-            .img-profile {
-                direction: ltr;
-            }
-
-            /* Close button - LTR */
-            .close {
-                float: right;
-                direction: ltr;
-            }
-
-            /* Responsive - LTR */
-            @media (max-width: 1024px) {
-                .thumbnails {
-                    left: -80px;
-                    right: auto;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .hero-inner {
-                    text-align: center;
-                }
-
-                .hero h1 {
-                    text-align: center;
-                }
-
-                .hero-lead {
-                    text-align: center;
-                }
-
-                .hero-buttons {
-                    justify-content: center;
-                }
-
-                .thumbnails {
-                    position: static;
-                    left: auto;
-                    right: auto;
-                    justify-content: center;
-                }
-
-                .card-actions {
-                    flex-direction: column;
-                }
-
-                .details-btn,
-                .invest-btn {
-                    width: 100%;
-                }
-            }
-
-            @media (max-width: 520px) {
-                .modal-content.auth-modal {
-                    direction: ltr;
-                }
-            }
-
-            /* Star Rating - LTR */
-            .star-rating {
-                direction: ltr;
-            }
-
-            .star-rating label {
-                direction: ltr;
-            }
-        </style>
-    @endif
 </head>
 
 <body>
@@ -1267,13 +470,14 @@
         </div> <!-- نهاية modal-content -->
     </div> <!-- نهاية modal -->
 
+
     <!-- Funding Modal -->
     <div class="modal fade" id="fundingModal" tabindex="-1" aria-labelledby="fundingModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="fundingModalLabel">{{ __('auth.funding_request_form') }}</h5>
+                    <h5 class="modal-title" id="fundingModalLabel">نموذج طلب التمويل</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -1294,96 +498,130 @@
                         enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="_method" id="formMethod" value="POST">
-                        <!-- title -->
-                        <div class="mb-4">
-                            <label for="title" class="form-label fw-bold">🏷️
-                                {{ __('auth.project_name') }}</label>
-                            <input type="text"
-                                class="form-control form-control-lg @error('title') is-invalid @enderror"
-                                id="title" name="title" value="{{ old('title') }}" required>
-                            @error('title')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
 
-                        <!-- category + funding_goal -->
-                        <div class="row mb-4">
+                        <!-- ========================== Title EN / AR ========================== -->
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="category_id" class="form-label fw-bold">
-                                    {{ __('auth.sector_label') }}
-                                </label>
-
-                                <select class="form-select form-select-lg @error('category_id') is-invalid @enderror"
-                                    id="category_id" name="category_id" required>
-
-                                    <option value="">{{ __('auth.select_sector') }}</option>
-
-                                    @if (isset($categories) && $categories->count())
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}"
-                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                                {{ $category->name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-
-                                @error('category_id')
+                                <label for="title_en" class="form-label fw-bold">🏷️
+                                    {{ __('auth.project_name_en') }}</label>
+                                <input type="text"
+                                    class="form-control form-control-lg @error('title_en') is-invalid @enderror"
+                                    id="title_en" name="title_en" value="{{ old('title_en') }}" required>
+                                @error('title_en')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label for="funding_goal" class="form-label fw-bold">
-                                    {{ __('auth.funding_amount') }}
-                                </label>
+                                <label for="title_ar" class="form-label fw-bold">🏷️
+                                    {{ __('auth.project_name_ar') }}</label>
+                                <input type="text"
+                                    class="form-control form-control-lg @error('title_ar') is-invalid @enderror"
+                                    id="title_ar" name="title_ar" value="{{ old('title_ar') }}" required>
+                                @error('title_ar')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
+                        <!-- ========================== Summary EN / AR ========================== -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="summary_en" class="form-label fw-bold">🖋️
+                                    {{ __('auth.summary_en') }}</label>
+                                <textarea class="form-control @error('summary_en') is-invalid @enderror" id="summary_en" name="summary_en"
+                                    rows="3" required>{{ old('summary_en') }}</textarea>
+                                @error('summary_en')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="summary_ar" class="form-label fw-bold">🖋️
+                                    {{ __('auth.summary_ar') }}</label>
+                                <textarea class="form-control @error('summary_ar') is-invalid @enderror" id="summary_ar" name="summary_ar"
+                                    rows="3" required>{{ old('summary_ar') }}</textarea>
+                                @error('summary_ar')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- ========================== Description EN / AR ========================== -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="description_en" class="form-label fw-bold">📄
+                                    {{ __('auth.description_en') }}</label>
+                                <textarea class="form-control @error('description_en') is-invalid @enderror" id="description_en"
+                                    name="description_en" rows="5">{{ old('description_en') }}</textarea>
+                                @error('description_en')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="description_ar" class="form-label fw-bold">📄
+                                    {{ __('auth.description_ar') }}</label>
+                                <textarea class="form-control @error('description_ar') is-invalid @enderror" id="description_ar"
+                                    name="description_ar" rows="5">{{ old('description_ar') }}</textarea>
+                                @error('description_ar')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- ========================== Category + Funding Goal ========================== -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="category_id"
+                                    class="form-label fw-bold">{{ __('auth.sector_label') }}</label>
+                                <select class="form-select form-select-lg @error('category_id') is-invalid @enderror"
+                                    id="category_id" name="category_id" required>
+                                    <option value="">{{ __('auth.select_sector') }}</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="funding_goal"
+                                    class="form-label fw-bold">{{ __('auth.funding_amount') }}</label>
                                 <input type="number"
                                     class="form-control form-control-lg @error('funding_goal') is-invalid @enderror"
                                     id="funding_goal" name="funding_goal" min="1000"
                                     value="{{ old('funding_goal') }}" required>
-
                                 @error('funding_goal')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
 
-
-                        <!-- term + interest -->
-                        <div class="row mb-4">
+                        <!-- ========================== Term + Interest + Min Investment ========================== -->
+                        <div class="row mb-3">
                             <div class="col-md-4">
-                                <label for="term_months" class="form-label fw-bold"> {{ __('auth.repayment_term') }}
-                                </label>
+                                <label for="term_months"
+                                    class="form-label fw-bold">{{ __('auth.repayment_term') }}</label>
                                 <select class="form-select form-select-lg @error('term_months') is-invalid @enderror"
                                     id="term_months" name="term_months" required>
-                                    <option value=""> {{ __('auth.select_term') }}
-                                    </option>
-                                    <option value="6" {{ old('term_months') == 6 ? 'selected' : '' }}>6
-                                        {{ __('auth.month') }}
-                                    </option>
-                                    <option value="12" {{ old('term_months') == 12 ? 'selected' : '' }}>12
-                                        {{ __('auth.month') }}
-                                    </option>
-                                    <option value="18" {{ old('term_months') == 18 ? 'selected' : '' }}>18
-                                        {{ __('auth.month') }}
-                                    </option>
-                                    <option value="24" {{ old('term_months') == 24 ? 'selected' : '' }}>24
-                                        {{ __('auth.month') }}
-                                    </option>
-                                    <option value="36" {{ old('term_months') == 36 ? 'selected' : '' }}>36
-                                        {{ __('auth.month') }}
-                                    </option>
+                                    <option value="">{{ __('auth.select_term') }}</option>
+                                    @for ($i = 6; $i <= 36; $i += 6)
+                                        <option value="{{ $i }}"
+                                            {{ old('term_months') == $i ? 'selected' : '' }}>{{ $i }}
+                                            {{ __('auth.month') }}</option>
+                                    @endfor
                                 </select>
                                 @error('term_months')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
-
-
                             <div class="col-md-4">
                                 <label for="interest_rate" class="form-label fw-bold">📊
-                                    {{ __('auth.interest_rate') }} (%)</label>
+                                    {{ __('auth.interest_rate') }}
+                                    (%)</label>
                                 <input type="number" step="0.01"
                                     class="form-control form-control-lg @error('interest_rate') is-invalid @enderror"
                                     id="interest_rate" name="interest_rate"
@@ -1395,12 +633,10 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="min_investment" class="form-label fw-bold">📊
-                                    {{ __('auth.minimum_investment') }}
-                                    ({{ __('auth.sar') }})</label>
+                                    {{ __('auth.minimum_investment') }} ({{ __('auth.sar') }})</label>
                                 <input type="number" step="0.01"
                                     class="form-control form-control-lg @error('min_investment') is-invalid @enderror"
-                                    id="min_investment" name="min_investment"
-                                    placeholder="{{ __('auth.example') }}: 12" min="1000" max="5000000"
+                                    id="min_investment" name="min_investment" min="1000" max="5000000"
                                     value="{{ old('min_investment') }}" required>
                                 @error('min_investment')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -1408,53 +644,26 @@
                             </div>
                         </div>
 
-
-
-                        <!-- summary -->
-                        <div class="mb-4">
-                            <label for="summary" class="form-label fw-bold">🖋️
-                                {{ __('auth.short_description') }}
-                            </label>
-                            <textarea class="form-control form-control-lg @error('summary') is-invalid @enderror" id="summary" name="summary"
-                                rows="3" required>{{ old('summary') }}</textarea>
-                            @error('summary')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- description -->
-                        <div class="mb-4">
-                            <label for="description" class="form-label fw-bold">📄
-                                {{ __('auth.detailed_description') }} </label>
-                            <textarea class="form-control form-control-lg @error('description') is-invalid @enderror" id="description"
-                                name="description" rows="5">{{ old('description') }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Image -->
-                        <div class="mb-4">
-                            <label for="projectImage" class="form-label fw-bold">🖼️ {{ __('auth.project_image') }}
-                            </label>
-                            <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                id="projectImage" name="image" accept="image/*">
-                            @error('image')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Gallery -->
-                        <div class="mb-4">
-                            <label for="projectGallery" class="form-label fw-bold">🖼️
-                                {{ __('auth.project_gallery') }}
-                            </label>
-                            <input type="file" class="form-control @error('gallery') is-invalid @enderror"
-                                id="projectGallery" name="gallery[]" multiple accept="image/*">
-                            @error('gallery.*')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-
+                        <!-- ========================== Image + Gallery ========================== -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="projectImage" class="form-label fw-bold">🖼️
+                                    {{ __('auth.project_image') }}</label>
+                                <input type="file" class="form-control @error('image') is-invalid @enderror"
+                                    id="projectImage" name="image" accept="image/*">
+                                @error('image')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="projectGallery" class="form-label fw-bold">🖼️
+                                    {{ __('auth.project_gallery') }}</label>
+                                <input type="file" class="form-control @error('gallery') is-invalid @enderror"
+                                    id="projectGallery" name="gallery[]" multiple accept="image/*">
+                                @error('gallery.*')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
@@ -1462,10 +671,12 @@
                         </button>
                     </form>
 
+
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Invest Modal -->
     <div id="investModal" class="modal-overlay">
@@ -1744,12 +955,28 @@
     </script>
 
     <script>
+        function closeAuthModal() {
+            const authModal = document.getElementById("authModal");
+            if (!authModal) return;
+
+            authModal.style.display = "none";
+            authModal.setAttribute("aria-hidden", "true");
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const authModal = document.getElementById("authModal");
+            const modalContent = authModal.querySelector(".modal-content"); // ✅ هذا كان ناقص
             const loginForm = document.getElementById("loginForm");
             const registerForm = document.getElementById("registerForm");
             const tabLogin = document.getElementById("authTabLogin");
             const tabRegister = document.getElementById("authTabRegister");
+
+            // إغلاق عند الضغط خارج المودال
+            authModal.addEventListener("click", function(e) {
+                if (!modalContent.contains(e.target)) {
+                    closeAuthModal();
+                }
+            });
 
             function showTab(tab) {
                 if (tab === "login") {
@@ -1765,7 +992,6 @@
                 }
             }
 
-            // فتح المودال من أي زر يحمل class="open-auth"
             document.querySelectorAll(".open-auth").forEach(btn => {
                 btn.addEventListener("click", function(e) {
                     e.preventDefault();
@@ -1776,11 +1002,9 @@
                 });
             });
 
-            // التبديل عند الضغط على أزرار التاب داخل المودال
             tabLogin.addEventListener("click", () => showTab("login"));
             tabRegister.addEventListener("click", () => showTab("register"));
 
-            // روابط "لديك حساب؟" و "إنشاء حساب جديد"
             document.getElementById("toLogin").addEventListener("click", e => {
                 e.preventDefault();
                 showTab("login");
@@ -1791,6 +1015,7 @@
             });
         });
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const fills = document.querySelectorAll(".progress-bar-fill");

@@ -11,43 +11,50 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryService
 {
-
+    /**
+     * إنشاء قسم جديد
+     */
     public function create(array $data): Category
     {
         return DB::transaction(function () use ($data) {
 
-            $data['slug'] = $this->generateSlug($data['name']);
+            // توليد الـ slug باستخدام الاسم الإنجليزي فقط عند الإنشاء
+            $data['slug'] = $this->generateSlug($data['name_en']);
 
-
-            // رفع الصورة (إن وُجدت)
+            // إنشاء القسم بدون الصورة أولاً
             $category = Category::create(collect($data)->except(['image'])->toArray());
 
+            // رفع الصورة إذا وُجدت
             if (!empty($data['image']) && $data['image'] instanceof UploadedFile) {
                 $category->update([
                     'image' => $data['image']->store('categories', 'public')
                 ]);
             }
+
             Log::info('Category created', [
-                'category_id'  => $category->id,
+                'category_id' => $category->id,
             ]);
 
             return $category;
         });
-        // إنشاء القسم
     }
+
+    /**
+     * تحديث قسم موجود
+     */
     public function update(Category $category, array $data): Category
     {
         return DB::transaction(function () use ($category, $data) {
 
-            // تحديث الـ slug عند تغيير العنوان
-            if (!empty($data['name']) && $data['name'] !== $category->name) {
-                $data['slug'] = $this->generateSlug($data['name'], $category->id);
+            // تحديث الـ slug عند تغيير الاسم
+            if (!empty($data['name_en']) && $data['name_en'] !== $category->name_en) {
+                $data['slug'] = $this->generateSlug($data['name_en'], $category->id);
             }
 
-            // تحديث البيانات الأساسية
+            // تحديث البيانات الأساسية بدون الصورة
             $category->update(collect($data)->except(['image'])->toArray());
 
-            // تحديث الصورة (إن وُجدت)
+            // تحديث الصورة إذا وُجدت
             if (!empty($data['image']) && $data['image'] instanceof UploadedFile) {
                 // حذف الصورة القديمة إذا كانت موجودة
                 if ($category->image) {
@@ -66,12 +73,17 @@ class CategoryService
             return $category;
         });
     }
+
+    /**
+     * توليد slug فريد للقسم
+     */
     private function generateSlug(string $name, ?int $ignoreId = null): string
     {
         $slug = Str::slug($name);
 
         $query = Category::where('slug', 'like', "{$slug}%");
 
+        // تجاهل قسم موجود عند التحديث
         if ($ignoreId) {
             $query->where('id', '!=', $ignoreId);
         }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -10,30 +10,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/front/css/dashboard.css') }}">
+    @if (App::getLocale() == 'en')
+        <link rel="stylesheet" href="{{ asset('assets/front/css/en.css') }}">
+    @endif
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
 
 </head>
 
 <body>{{--  --}}
-    <!-- Header -->
-    <!-- Header -->
     <header>
         <div class="container header-inner">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-hand-holding-usd"></i>
-                </div>
-                <span class="logo-text">{{ __('auth.p') }}</span>
+                <a href="{{ route('home') }}" class="logo-link"
+                    style="display: flex; align-items: center; gap: 1rem; text-decoration: none ; color: white;">
+                    <div class="logo-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <span class="logo-text">{{ __('auth.p') }}</span>
+                </a>
             </div>
+
 
             <div class="header-actions">
                 <!-- Notifications -->
                 @if (auth()->check())
                     <div class="dropdown">
-                        <div class="icon-btn position-relative" data-bs-toggle="dropdown"
-                            title="{{ __('auth.notifications') }}" style="cursor:pointer;">
+                        <div class="icon-btn position-relative" data-bs-toggle="dropdown" title="الإشعارات"
+                            style="cursor:pointer;">
                             <i class="fas fa-bell fa-lg"></i>
 
                             @if ($unreadNotifications->count() > 0)
@@ -466,38 +470,40 @@
             </div>
         </div>
 
+        @can('view_project_status')
 
 
-        <div class="timeline-container"
-            style="background:white; border-radius:24px; padding:2rem; box-shadow:var(--card-shadow); border:1px solid #f1f5f9;">
-            <h4 class="mb-4">{{ __('auth.project_stages') }}</h4>
-            <div class="timeline">
-                @foreach ($project->stages() as $field => $label)
-                    <div class="timeline-item d-flex justify-content-between align-items-center mb-4">
-                        <div class="timeline-content">
-                            <h6 class="fw-bold mb-2">{{ $label }}</h6>
-                            <small class="text-muted">
+            <div class="timeline-container"
+                style="background:white; border-radius:24px; padding:2rem; box-shadow:var(--card-shadow); border:1px solid #f1f5f9;">
+                <h4 class="mb-4">{{ __('auth.project_stages') }}</h4>
+                <div class="timeline">
+                    @foreach ($project->stages() as $field => $label)
+                        <div class="timeline-item d-flex justify-content-between align-items-center mb-4">
+                            <div class="timeline-content">
+                                <h6 class="fw-bold mb-2">{{ $label }}</h6>
+                                <small class="text-muted">
+                                    @if ($project->$field)
+                                        <i class="fas fa-calendar-check me-1 text-success"></i>
+                                        {{ $project->$field->format('d F Y') }}
+                                        <span class="badge bg-success ms-2">{{ __('auth.completed') }}</span>
+                                    @else
+                                        <i class="fas fa-clock me-1 text-muted"></i>
+                                        <span class="text-muted">{{ __('auth.not_reached_yet') }}</span>
+                                    @endif
+                                </small>
+                            </div>
+                            <div class="timeline-dot {{ $project->$field ? 'completed' : 'pending' }}">
                                 @if ($project->$field)
-                                    <i class="fas fa-calendar-check me-1 text-success"></i>
-                                    {{ $project->$field->format('d F Y') }}
-                                    <span class="badge bg-success ms-2">{{ __('auth.completed') }}</span>
+                                    <i class="fas fa-check text-white"></i>
                                 @else
-                                    <i class="fas fa-clock me-1 text-muted"></i>
-                                    <span class="text-muted">{{ __('auth.not_reached_yet') }}</span>
+                                    <i class="fas fa-circle text-muted"></i>
                                 @endif
-                            </small>
+                            </div>
                         </div>
-                        <div class="timeline-dot {{ $project->$field ? 'completed' : 'pending' }}">
-                            @if ($project->$field)
-                                <i class="fas fa-check text-white"></i>
-                            @else
-                                <i class="fas fa-circle text-muted"></i>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
-        </div>
+        @endcan
 
         <!-- Repayment Section -->
         <h3 class="section-title mt-5">{{ __('auth.installment_table') }}</h3>
@@ -506,73 +512,78 @@
                 <i class="fas fa-exclamation-triangle text-danger me-2"></i>
             </div>
         </div>
-        <div
-            style="background: white; border-radius: 24px; padding: 2rem; box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h4 class="mb-1" style="color: #0f172a;">{{ $project->title }}</h4>
-                    <p class="text-muted mb-0">{{ __('auth.total_amount') }}:{{ $project->funding_goal }}
-                        {{ __('auth.sar') }}</p>
-                </div>
-                <div class="text-end">
-                    <div class="fw-bold fs-5">💳 {{ __('auth.paid') }}: {{ $project->funded_amount }}
-                        {{ __('auth.sar') }}</div>
-                    <div class="text-success fw-bold fs-5">💰 {{ __('auth.remaining_amount') }}:
-                        {{ $project->funding_goal - $project->funded_amount }} {{ __('auth.sar') }}</div>
-                </div>
-            </div>
+        @can('view_repayment_schedule', $project)
+
             <div
-                style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); height: 8px; border-radius: 4px; margin-bottom: 1.5rem; overflow: hidden;">
+                style="background: white; border-radius: 24px; padding: 2rem; box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="mb-1" style="color: #0f172a;">{{ $project->title }}</h4>
+                        <p class="text-muted mb-0">{{ __('auth.total_amount') }}:{{ $project->funding_goal }}
+                            {{ __('auth.sar') }}</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold fs-5">💳 {{ __('auth.paid') }}: {{ $project->funded_amount }}
+                            {{ __('auth.sar') }}</div>
+                        <div class="text-success fw-bold fs-5">💰 {{ __('auth.remaining_amount') }}:
+                            {{ $project->funding_goal - $project->funded_amount }} {{ __('auth.sar') }}</div>
+                    </div>
+                </div>
                 <div
-                    style="height: 100%; background: linear-gradient(90deg, #1e40af, #10b981); width: {{ $percentage }}%;">
+                    style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); height: 8px; border-radius: 4px; margin-bottom: 1.5rem; overflow: hidden;">
+                    <div
+                        style="height: 100%; background: linear-gradient(90deg, #1e40af, #10b981); width: {{ $percentage }}%;">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>{{ __('auth.installment_number') }}</th>
+                                <th>{{ __('auth.amount') }}</th>
+                                <th>{{ __('auth.status') }}</th>
+                                <th>{{ __('auth.actual_payment_date') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($project->investments as $index => $ins)
+                                @php
+                                    $paidDate = $ins->paid_at;
+                                    $daysRemaining = $paidDate
+                                        ? $paidDate
+                                            ->startOfDay()
+                                            ->diffInDays(\Carbon\Carbon::now()->startOfDay(), false)
+                                        : '--';
+                                @endphp
+                                <tr>
+                                    <td class="fw-bold">{{ $index + 1 }}</td>
+                                    <td>{{ number_format($ins->amount) }} {{ __('auth.sar') }}</td>
+
+                                    <td>
+                                        @if ($ins->status === 'paid')
+                                            <span
+                                                style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block;">{{ __('auth.paid_status') }}</span>
+                                        @elseif ($ins->status === 'pending')
+                                            <span
+                                                style="background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block;">{{ __('auth.pending_status') }}</span>
+                                        @else
+                                            <span
+                                                style="background: linear-gradient(135deg, #fee2e2, #fca5a5); color: #b91c1c; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block;">{{ __('auth.defaulted_status') }}</span>
+                                        @endif
+                                    </td>
+
+                                    <td>{{ $paidDate ? $paidDate->format('d / m / Y') : '--' }}</td>
+
+
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>{{ __('auth.installment_number') }}</th>
-                            <th>{{ __('auth.amount') }}</th>
-                            <th>{{ __('auth.status') }}</th>
-                            <th>{{ __('auth.actual_payment_date') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($project->investments as $index => $ins)
-                            @php
-                                $paidDate = $ins->paid_at;
-                                $daysRemaining = $paidDate
-                                    ? $paidDate->startOfDay()->diffInDays(\Carbon\Carbon::now()->startOfDay(), false)
-                                    : '--';
-                            @endphp
-                            <tr>
-                                <td class="fw-bold">{{ $index + 1 }}</td>
-                                <td>{{ number_format($ins->amount) }} {{ __('auth.sar') }}</td>
-
-                                <td>
-                                    @if ($ins->status === 'paid')
-                                        <span
-                                            style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block;">{{ __('auth.paid_status') }}</span>
-                                    @elseif ($ins->status === 'pending')
-                                        <span
-                                            style="background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block;">{{ __('auth.pending_status') }}</span>
-                                    @else
-                                        <span
-                                            style="background: linear-gradient(135deg, #fee2e2, #fca5a5); color: #b91c1c; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block;">{{ __('auth.defaulted_status') }}</span>
-                                    @endif
-                                </td>
-
-                                <td>{{ $paidDate ? $paidDate->format('d / m / Y') : '--' }}</td>
-
-
-                            </tr>
-                        @endforeach
-
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
+        @endcan
         <!-- Investment Form -->
         <div class="investment-form">
             <h4 class="mb-3">{{ __('auth.quick_investment_form') }}</h4>
@@ -618,11 +629,20 @@
                     <span class="summary-value text-success" id="totalReturn">+{{ $project->interest_rate }}%</span>
                 </div>
             </div>
-
-            <button class="btn btn-invest" onclick="redirectToStripe()">
-                <i class="fas fa-check-circle me-2"></i> {{ __('auth.confirm_investment') }}
-            </button>
-
+            @guest
+                {{-- مستخدم غير مسجل دخول --}}
+                <button class="invest-btn open-auth" data-tab="login">
+                    <i class="fas fa-coins"></i>
+                    {{ __('auth.login_to_invest') }}
+                </button>
+            @else
+                {{-- مستخدم مسجل دخول --}}
+                @can('make_investment')
+                    <button class="btn btn-invest" onclick="redirectToStripe()">
+                        <i class="fas fa-check-circle me-2"></i> {{ __('auth.confirm_investment') }}
+                    </button>
+                @endcan
+            @endguest
             <p class="disclaimer text-center mb-0">
                 <i class="fas fa-info-circle me-1"></i> {{ __('auth.agreement_disclaimer') }}.
             </p>
@@ -771,6 +791,100 @@
             </div>
         </div>
     </footer>
+    <!-- Auth Modal (Login / Register) -->
+    <div id="authModal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="authModalLabel">
+        <div class="modal-content auth-modal">
+
+            <span class="close" onclick="closeAuthModal()" aria-label="{{ __('auth.close') }}">&times;</span>
+
+            <div class="auth-tabs" style="display:flex; gap:8px; justify-content:center; margin-bottom:12px;">
+                <button type="button" class="tab-btn active" data-tab="login"
+                    id="authTabLogin">{{ __('auth.login') }}</button>
+                <button type="button" class="tab-btn" data-tab="register"
+                    id="authTabRegister">{{ __('auth.register') }}</button>
+            </div>
+
+            <div class="auth-body">
+
+                <!-- تسجيل الدخول -->
+                <form id="loginForm" class="auth-form" method="POST" action="{{ route('login') }}">
+
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="loginEmail">{{ __('auth.email') }}</label>
+                        <input id="loginEmail" name="email" type="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">{{ __('auth.password') }}</label>
+                        <input id="loginPassword" name="password" type="password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">
+                        {{ __('auth.login') }}
+                    </button>
+
+                    <div style="text-align:center; margin-top:8px; font-size:0.95rem;">
+                        <a href="#" id="toRegister"
+                            style="text-decoration:underline;">{{ __('auth.new_account') }}</a>
+                    </div>
+                </form>
+
+                <!-- إنشاء حساب -->
+                <form id="registerForm" class="auth-form" method="POST" action="{{ route('register') }}"
+                    style="display:none;">
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="regName">{{ __('auth.full_name') }}</label>
+                        <input id="regName" name="name" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail">{{ __('auth.email') }}</label>
+                        <input id="regEmail" name="email" type="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone">{{ __('auth.phone') }}</label>
+                        <input id="regPhone" name="phone" type="tel" placeholder="05xxxxxxxx" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">{{ __('auth.password') }}</label>
+                        <input id="regPassword" name="password" type="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword2">{{ __('auth.confirm_password') }}</label>
+                        <input id="regPassword2" name="password_confirmation" type="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regRole">{{ __('auth.account_type') }}</label>
+                        <select id="regRole" name="role" required>
+                            <option value="">{{ __('auth.select_account_type') }}</option>
+                            <option value="investor">{{ __('auth.investor') }}</option>
+                            <option value="borrower">{{ __('auth.borrower') }}</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">
+                        {{ __('auth.register') }}
+                    </button>
+
+                    <div style="text-align:center; margin-top:8px; font-size:0.95rem;">
+                        <a href="#" id="toLogin"
+                            style="text-decoration:underline;">{{ __('auth.have_account') }}</a>
+                    </div>
+                </form>
+
+            </div> <!-- نهاية auth-body -->
+
+        </div> <!-- نهاية modal-content -->
+    </div> <!-- نهاية modal -->
+
     <script>
         let selectedProjectId = {{ $project->id }};
         let projectReturn = {{ $project->interest_rate }};
@@ -885,7 +999,67 @@
             });
         });
     </script>
+    <script>
+        function closeAuthModal() {
+            const authModal = document.getElementById("authModal");
+            if (!authModal) return;
 
+            authModal.style.display = "none";
+            authModal.setAttribute("aria-hidden", "true");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const authModal = document.getElementById("authModal");
+            const modalContent = authModal.querySelector(".modal-content"); // ✅ هذا كان ناقص
+            const loginForm = document.getElementById("loginForm");
+            const registerForm = document.getElementById("registerForm");
+            const tabLogin = document.getElementById("authTabLogin");
+            const tabRegister = document.getElementById("authTabRegister");
+
+            // إغلاق عند الضغط خارج المودال
+            authModal.addEventListener("click", function(e) {
+                if (!modalContent.contains(e.target)) {
+                    closeAuthModal();
+                }
+            });
+
+            function showTab(tab) {
+                if (tab === "login") {
+                    loginForm.style.display = "block";
+                    registerForm.style.display = "none";
+                    tabLogin.classList.add("active");
+                    tabRegister.classList.remove("active");
+                } else {
+                    loginForm.style.display = "none";
+                    registerForm.style.display = "block";
+                    tabLogin.classList.remove("active");
+                    tabRegister.classList.add("active");
+                }
+            }
+
+            document.querySelectorAll(".open-auth").forEach(btn => {
+                btn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const tab = this.dataset.tab || "register";
+                    authModal.style.display = "flex";
+                    authModal.setAttribute("aria-hidden", "false");
+                    showTab(tab);
+                });
+            });
+
+            tabLogin.addEventListener("click", () => showTab("login"));
+            tabRegister.addEventListener("click", () => showTab("register"));
+
+            document.getElementById("toLogin").addEventListener("click", e => {
+                e.preventDefault();
+                showTab("login");
+            });
+            document.getElementById("toRegister").addEventListener("click", e => {
+                e.preventDefault();
+                showTab("register");
+            });
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

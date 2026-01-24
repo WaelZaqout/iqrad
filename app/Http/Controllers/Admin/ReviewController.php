@@ -36,7 +36,7 @@ class ReviewController extends Controller
         }
 
         // عرض الصفحة العادية
-        return view('admin.reviews.index', compact('reviews'));
+        return view('admin.supports.reviews.index', compact('reviews'));
     }
 
     /**

@@ -12,14 +12,14 @@
         <div class="header-section mb-4">
             <div class="row align-items-center mb-4">
                 <div class="col-lg-6">
-                    <h2 class="mb-2 fw-bold text-primary">إدارة المشاريع</h2>
-                    <p class="text-muted mb-0">إدارة ومراقبة جميع المشاريع في النظام</p>
+                    <h2 class="mb-2 fw-bold text-primary">{{__('admin.project_management')}}</h2>
+                    <p class="text-muted mb-0">{{ __('admin.manage_all_projects_in_system') }}</p>
                 </div>
                 <div class="col-lg-6 text-lg-end">
                     <div class="search-container">
                         <div class="input-group" style="width: 300px;">
                             <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
-                            <input id="searchByName" type="text" placeholder="البحث في المشاريع..." class="form-control"
+                            <input id="searchByName" type="text" placeholder="{{__('admin.search_projects')}}" class="form-control"
                                 value="{{ $q ?? '' }}">
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                                 <div>
                                     <h4 class="mb-1 text-primary fw-bold">{{ $stats['total'] }}
                                     </h4>
-                                    <small class="text-muted">إجمالي المشاريع</small>
+                                    <small class="text-muted">{{__('admin.total_projects')}}</small>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                                 <div>
                                     <h4 class="mb-1 text-warning fw-bold">{{ $stats['pending'] }}</h4>
 
-                                    <small class="text-muted">في انتظار المراجعة</small>
+                                    <small class="text-muted">{{__('admin.pending_projects')}}</small>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                                 <div>
                                     <h4 class="mb-1 text-success fw-bold">{{ $stats['approved'] }}</h4>
 
-                                    <small class="text-muted">مُعتمدة</small>
+                                    <small class="text-muted">{{__('admin.approved_projects')}}</small>
                                 </div>
                             </div>
                         </div>
@@ -83,19 +83,19 @@
                     <thead>
                         <tr>
                             <th style="white-space: nowrap; min-width: 50px;">#</th>
-                            <th style="white-space: nowrap; min-width: 140px;">صورة المشروع</th>
-                            <th style="min-width: 150px;">اسم المشروع</th>
-                            <th style="min-width: 120px;">نوع القطاع</th>
-                            <th style="min-width: 120px;">اسم المقترض</th>
-                            <th style="white-space: nowrap; min-width: 120px;">مبلغ التمويل </th>
-                            <th style="white-space: nowrap; min-width: 120px;">المبلغ الممول </th>
-                            <th style="white-space: nowrap; min-width: 100px;">نسبة الفائدة </th>
-                            <th style="white-space: nowrap; min-width: 120px;">مدة السداد (بالأشهر)</th>
-                            <th style="white-space: nowrap; min-width: 120px;">الحد الأدنى للاستثمار (ريال)</th>
-                            <th style="min-width: 100px;">الحالة</th>
-                            <th style="min-width: 200px;">ملخص </th>
-                            <th style="min-width: 200px;">وصف مختصر</th>
-                            <th style="white-space: nowrap; min-width: 100px;">الإجراءات</th>
+                            <th style="white-space: nowrap; min-width: 140px;">{{__('admin.main_project_image')}}</th>
+                            <th style="min-width: 150px;">{{__('admin.project_title')}}</th>
+                            <th style="min-width: 120px;">{{__('admin.category')}}</th>
+                            <th style="min-width: 120px;">{{__('admin.borrower_name')}}</th>
+                            <th style="white-space: nowrap; min-width: 120px;">{{__('admin.funding_goal')}} </th>
+                            <th style="white-space: nowrap; min-width: 120px;">{{__('admin.funded_amount')}} </th>
+                            <th style="white-space: nowrap; min-width: 100px;">{{__('admin.interest_rate_percent')}} </th>
+                            <th style="white-space: nowrap; min-width: 120px;">{{ __('admin.term_in_months') }}</th>
+                            <th style="white-space: nowrap; min-width: 120px;">{{__('admin.minimum_investment')}}</th>
+                            <th style="min-width: 100px;">{{__('admin.status')}}</th>
+                            <th style="min-width: 200px;">{{__('admin.summary')}} </th>
+                            <th style="min-width: 200px;">{{__('admin.short_description')}}</th>
+                            <th style="white-space: nowrap; min-width: 100px;">{{__('admin.actions')}}</th>
                         </tr>
                     </thead>
                     <tbody id="categoriesTbody">

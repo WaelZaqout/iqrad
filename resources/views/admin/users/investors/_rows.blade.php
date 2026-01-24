@@ -105,7 +105,7 @@
 
 @empty
     <tr>
-        <td colspan="13" class="text-center text-muted">لا توجد نتائج مطابقة.</td>
+        <td colspan="13" class="text-center text-muted">{{ __('admin.no_matching_results') }}</td>
     </tr>
 @endforelse
 <script>

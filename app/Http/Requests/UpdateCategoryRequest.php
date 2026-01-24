@@ -20,13 +20,16 @@ class UpdateCategoryRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(Category $category): array
+    public function rules(): array
     {
         return [
-            'name'        => 'required|string|max:255',
-            'parent_id'   => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|max:10240', // 10MB
-            'description' => 'nullable|string',
+            'name_en'        => 'required|string|max:255',
+            'name_ar'        => 'required|string|max:255',
+            'parent_id'      => 'nullable|exists:categories,id|not_in:' . $this->category?->id,
+            'slug'           => 'required|string|max:255|unique:categories,slug,' . $this->route('category'),
+            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'description_en' => 'nullable|string',
+            'description_ar' => 'nullable|string',
         ];
     }
 }

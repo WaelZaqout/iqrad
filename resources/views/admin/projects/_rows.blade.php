@@ -65,7 +65,7 @@
         <td class="interest_rate">{{ $project->interest_rate }}%</td>
 
         {{-- مدة السداد --}}
-        <td class="term_months">{{ $project->term_months }} شهر</td>
+        <td class="term_months">{{ $project->term_months }} {{ __('admin.month') }}</td>
 
         {{-- الحد الأدنى للاستثمار --}}
         <td class="min_investment">{{ number_format($project->min_investment) }}</td>
@@ -124,6 +124,6 @@
 
 @empty
     <tr>
-        <td colspan="14" class="text-center text-muted">لا توجد نتائج مطابقة.</td>
+        <td colspan="14" class="text-center text-muted">{{ __('admin.no_matching_results') }}</td>
     </tr>
 @endforelse

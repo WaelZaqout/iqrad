@@ -2,17 +2,22 @@
 
 namespace App\Models;
 
+use App\Traits\HasLocale;
 use App\Enums\ProjectStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    use HasLocale;
     protected $fillable = [
         'borrower_id',
         'category_id',
-        'title',
-        'summary',
-        'description',
+        'title_en',
+        'title_ar',
+        'summary_en',
+        'summary_ar',
+        'description_en',
+        'description_ar',
         'funding_goal',
         'funded_amount',
         'interest_rate',
@@ -85,18 +90,38 @@ class Project extends Model
 
     public function scopeSearch($query, ?string $term)
     {
-        return $term
-            ? $query->where(function ($q) use ($term) {
-                $q->where('title', 'like', "%{$term}%")
-                  ->orWhereHas('borrower', function ($borrowerQuery) use ($term) {
-                      $borrowerQuery->where('name', 'like', "%{$term}%");
-                  })
-                  ->orWhereHas('category', function ($categoryQuery) use ($term) {
-                      $categoryQuery->where('name', 'like', "%{$term}%");
-                  });
-            })
-            : $query;
+        if (!$term) {
+            return $query;
+        }
+
+        $locale = app()->getLocale(); // ar أو en
+
+        return $query->where(function ($q) use ($term, $locale) {
+
+            $q->where("title_{$locale}", 'like', "%{$term}%")
+
+                ->orWhereHas('borrower', function ($borrowerQuery) use ($term) {
+                    $borrowerQuery->where('name', 'like', "%{$term}%");
+                })
+
+                ->orWhereHas('category', function ($categoryQuery) use ($term, $locale) {
+                    $categoryQuery->where("name_{$locale}", 'like', "%{$term}%");
+                });
+        });
     }
+
+    public function getPercentageAttribute(): int
+    {
+        if ($this->funding_goal <= 0) {
+            return 0;
+        }
+
+        return min(
+            (int) round(($this->funded_amount / $this->funding_goal) * 100),
+            100
+        );
+    }
+
     public function getStatusBadgeAttribute(): array
     {
         return [
@@ -104,7 +129,35 @@ class Project extends Model
             'class' => $this->status->badgeClass(),
         ];
     }
+    public function scopeVisibleTo($query, $user)
+    {
+        // زائر
+        if (!$user) {
+            return $query;
+        }
 
+        // مقترض → مشاريعه فقط
+        if ($user->hasRole('borrower')) {
+            return $query->where('borrower_id', $user->id);
+        }
+
+        // مستثمر / أدمن → كل المشاريع
+        return $query;
+    }
+
+    public function getTitleAttribute()
+    {
+        return $this->translate('title');
+    }
+
+    public function getSummaryAttribute()
+    {
+        return $this->translate('summary');
+    }
+    public function getDescriptionAttribute()
+    {
+        return $this->translate('description');
+    }
 
     public function borrower()
     {
@@ -128,12 +181,7 @@ class Project extends Model
     }
 
 
-    public function getPercentageAttribute()
-    {
-        return $this->funding_goal > 0
-            ? round(($this->funded_amount / $this->funding_goal) * 100)
-            : 0;
-    }
+
 
     public function getIsCompletedAttribute()
     {

@@ -9,6 +9,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\InvestorController;
+use App\Http\Controllers\SupportChatController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ProjectController;
 
@@ -26,10 +27,14 @@ Route::get('/notification', [FrontController::class, 'notification'])->name('not
 // routes/web.php
 Route::post('/notifications/mark-read', [FrontController::class, 'markRead'])
     ->name('notifications.markRead');
+Route::get('/support', [SupportChatController::class, 'index'])->name('support.index');
+Route::post('/support/sendMessage', [SupportChatController::class, 'sendMessage'])->name('support.sendMessage');
 
 Route::get('/details/{id}', [FrontController::class, 'details'])->name('details');
 Route::get('/filter-projects', [FrontController::class, 'all']);
 Route::get('/filter-projects/{categoryId}', [FrontController::class, 'filterByCategory']);
+Route::get('/projects/filter', [FrontController::class, 'filter'])
+    ->name('projects.filter');
 
 Route::get('/dashboard', [FrontController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware(['auth'])->group(function () {

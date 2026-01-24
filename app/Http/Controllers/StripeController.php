@@ -13,6 +13,11 @@ class StripeController extends Controller
 {
     public function checkout(Investment $investment)
     {
+        $investment->load('project');
+        $project = $investment->project;
+        $remaining = $project->funding_goal - $project->funded_amount;
+        $amount = min($investment->amount, $remaining);
+
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::create([
@@ -23,7 +28,7 @@ class StripeController extends Controller
                     'product_data' => [
                         'name' => 'استثمار في مشروع #' . $investment->project_id,
                     ],
-                    'unit_amount' => $investment->amount * 100, // ريال → هللة
+                    'unit_amount' => $amount * 100, // ريال → هللة
                 ],
                 'quantity' => 1,
             ]],
@@ -39,14 +44,18 @@ class StripeController extends Controller
     {
         $investment = Investment::with(['project', 'investor'])->findOrFail($request->investment);
 
+        $project = $investment->project;
+        $remaining = $project->funding_goal - $project->funded_amount;
+        $amount = min($investment->amount, $remaining);
+
         // تحديث حالة الاستثمار
         $investment->update([
             'status' => 'paid',
             'paid_at' => $investment->paid_at ?? now(),
+            'amount' => $amount,
         ]);
 
-        $project = $investment->project;
-        $project->funded_amount += $investment->amount;
+        $project->funded_amount += $amount;
 
         if ($project->funded_amount >= $project->funding_goal) {
             $project->status = 'completed';
