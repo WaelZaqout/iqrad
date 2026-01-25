@@ -936,6 +936,31 @@
             background: white;
         }
 
+        .edit-btn {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.6rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+        }
+
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
+        }
+
         /* Chat Widget */
         .chat-widget {
             position: fixed;

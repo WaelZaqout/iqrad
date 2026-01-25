@@ -31,8 +31,6 @@ Route::get('/support', [SupportChatController::class, 'index'])->name('support.i
 Route::post('/support/sendMessage', [SupportChatController::class, 'sendMessage'])->name('support.sendMessage');
 
 Route::get('/details/{id}', [FrontController::class, 'details'])->name('details');
-Route::get('/filter-projects', [FrontController::class, 'all']);
-Route::get('/filter-projects/{categoryId}', [FrontController::class, 'filterByCategory']);
 Route::get('/projects/filter', [FrontController::class, 'filter'])
     ->name('projects.filter');
 

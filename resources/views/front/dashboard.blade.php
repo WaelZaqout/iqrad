@@ -255,7 +255,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.projects_under_review') }}</div>
-                        <div class="card-value counter" data-count="{{ $pendingProjects }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['pendingProjects'] }}">0</div>
                         <div class="card-unit">{{ __('auth.project') }}</div>
                     </div>
                 </div>
@@ -267,7 +267,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.funded_projects') }}</div>
-                        <div class="card-value counter" data-count="{{ $fundedProjects }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['fundedProjects'] }} ">0</div>
                         <div class="card-unit">{{ __('auth.project') }}</div>
                     </div>
                 </div>
@@ -279,7 +279,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.total_required_funding') }}</div>
-                        <div class="card-value counter"data-count="{{ $requiredFunding }}">0</div>
+                        <div class="card-value counter"data-count="{{ $stats['requiredFunding'] }}">0</div>
                         <div class="card-unit">{{ __('auth.sar') }}</div>
                     </div>
                 </div>
@@ -378,112 +378,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Animated counters
-        function animateCounters() {
-            document.querySelectorAll('.counter').forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-count'));
-                const duration = 2000;
-                const increment = target / (duration / 16);
-                let current = 0;
-
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        counter.textContent = target.toLocaleString('ar-SA');
-                        clearInterval(timer);
-                    } else {
-                        counter.textContent = Math.ceil(current).toLocaleString('ar-SA');
-                    }
-                }, 16);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            animateCounters();
-
-            // Toggle notifications panel
-            document.getElementById('notificationsBtn').addEventListener('click', function() {
-                document.getElementById('notificationsPanel').classList.add('show');
-            });
-
-            document.getElementById('closeNotifications').addEventListener('click', function() {
-                document.getElementById('notificationsPanel').classList.remove('show');
-            });
-
-            // Close notifications panel when clicking outside
-            document.addEventListener('click', function(event) {
-                const notificationsPanel = document.getElementById('notificationsPanel');
-                const notificationsBtn = document.getElementById('notificationsBtn');
-
-                if (!notificationsPanel.contains(event.target) &&
-                    !notificationsBtn.contains(event.target) &&
-                    notificationsPanel.classList.contains('show')) {
-                    notificationsPanel.classList.remove('show');
-                }
-            });
-
-
-        });
-    </script>
-
-    <script>
-        // Form submission handling with better UX
-        let isSubmitting = false;
-
-        document.getElementById('projectForm')?.addEventListener('submit', function(e) {
-            if (isSubmitting) return; // Prevent double submission
-
-            isSubmitting = true;
-            e.preventDefault(); // Prevent default form submission
-
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerHTML;
-
-            submitBtn.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> جاري الإرسال...';
-            submitBtn.disabled = true;
-
-            // Submit the form after showing loading state
-            setTimeout(() => {
-                this.submit();
-            }, 500);
-        });
-    </script>
-
-    <script>
-        // If server-side validation failed, open the funding modal so user sees errors
-        @if ($errors->any())
-            document.addEventListener('DOMContentLoaded', function() {
-                var fundingModalEl = document.getElementById('fundingModal');
-                if (fundingModalEl) {
-                    var fundingModal = new bootstrap.Modal(fundingModalEl);
-                    fundingModal.show();
-                }
-            });
-        @endif
-
-        // Show success modal if controller set a success toast (after redirect)
-        @if (session('toast.type') === 'success')
-            document.addEventListener('DOMContentLoaded', function() {
-                var successModalEl = document.getElementById('successModal');
-                if (successModalEl) {
-                    var successModal = new bootstrap.Modal(successModalEl);
-                    successModal.show();
-                }
-            });
-        @endif
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll('.progress-bar-fill').forEach(bar => {
-                let percentage = bar.getAttribute('data-percentage');
-                setTimeout(() => {
-                    bar.style.width = percentage + '%';
-                }, 200); // تأخير خفيف لظهور الحركة
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/front/js/script.js') }}"></script>
+    <script src="{{ asset('assets/front/js/project-form.js') }}"></script>
+    <script src="{{ asset('assets/front/js/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/front/js/auth-modal.js') }}"></script>
+    <script src="{{ asset('assets/front/js/stripe.js') }}"></script>
+    <script src="{{ asset('assets/front/js/chat.js') }}"></script>
+    <script src="{{ asset('assets/front/js/faq.js') }}"></script>
     <script>
         function filterProjects(status) {
 

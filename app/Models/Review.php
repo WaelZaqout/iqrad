@@ -20,6 +20,7 @@ class Review extends Model
         'rating' => 'integer',
     ];
 
+    // العلاقات
     public function project()
     {
         return $this->belongsTo(Project::class);
@@ -28,5 +29,26 @@ class Review extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // آخر المراجعات للصفحة الرئيسية
+    public static function homepage(int $limit = 10)
+    {
+        return self::with(['user', 'project'])
+            ->latest()
+            ->take($limit)
+            ->get();
+    }
+
+    // متوسط التقييمات لجميع المشاريع
+    public static function averageRating()
+    {
+        return round(self::avg('rating'), 1);
+    }
+
+    // عدد التقييمات لجميع المشاريع
+    public static function ratingsCount()
+    {
+        return self::count();
     }
 }

@@ -1,2 +1,0 @@
-- [ ] Modify checkout method: Load project, calculate remaining = funding_goal - funded_amount, amount = min(investment->amount, remaining), use in Stripe session
-- [ ] Modify success method: Recalculate amount = min(investment->amount, remaining), update investment->amount, add to project->funded_amount

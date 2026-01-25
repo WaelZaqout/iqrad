@@ -38,6 +38,8 @@ enum ProjectStatus: string
             self::Approved  => [self::Funding],
             self::Funding   => [self::Active],
             self::Active    => [self::Completed],
+            self::Completed => [],
+            self::Defaulted => [],
             default         => [],
         }, true);
     }

@@ -71,18 +71,24 @@
                 <a href="{{ route('details', $project->id) }}" class="details-btn">
                     <i class="far fa-eye"></i> {{ __('auth.details') }}
                 </a>
-                @can('edit_project_before_approval', $project)
-                    <button class="edit-btn" onclick="editProject(this)" data-id="{{ $project->id }}"
-                        data-title_en="{{ $project->title_en }}" data-title_ar="{{ $project->title_ar }}"
-                        data-category_id="{{ $project->category_id }}" data-funding_goal="{{ $project->funding_goal }}"
-                        data-term_months="{{ $project->term_months }}" data-interest_rate="{{ $project->interest_rate }}"
-                        data-min_investment="{{ $project->min_investment }}" data-summary_en="{{ $project->summary_en }}"
-                        data-summary_ar="{{ $project->summary_ar }}" data-description_en="{{ $project->description_en }}"
-                        data-description_ar="{{ $project->description_ar }}" data-bs-toggle="modal"
-                        data-bs-target="#fundingModal">
-                        <i class="fas fa-edit"></i> {{ __('auth.edit') }}
-                    </button>
-                @endcan
+                @auth
+                    @if (Auth::id() === $project->borrower_id && $project->status !== 'completed')
+                        <button class="edit-btn" onclick="editProject(this)" data-id="{{ $project->id }}"
+                            data-title_en="{{ $project->title_en }}" data-title_ar="{{ $project->title_ar }}"
+                            data-summary_en="{{ $project->summary_en }}" data-summary_ar="{{ $project->summary_ar }}"
+                            data-description_en="{{ $project->description_en }}"
+                            data-description_ar="{{ $project->description_ar }}"
+                            data-category_id="{{ $project->category_id }}"
+                            data-funding_goal="{{ $project->funding_goal }}"
+                            data-term_months="{{ $project->term_months }}"
+                            data-interest_rate="{{ $project->interest_rate }}"
+                            data-min_investment="{{ $project->min_investment }}" data-bs-toggle="modal"
+                            data-bs-target="#fundingModal">
+                            <i class="fas fa-edit"></i>  {{ __('auth.edit') }}
+                        </button>
+                    @endif
+                @endauth
+
                 @guest
                     <button class="invest-btn open-auth" data-tab="login">
                         <i class="fas fa-coins"></i>

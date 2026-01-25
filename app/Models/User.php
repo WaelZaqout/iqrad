@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,5 +65,23 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+    // في موديل User
+
+    public function supportConversations()
+    {
+        return $this->hasMany(SupportConversation::class);
+    }
+    public function getUpcomingPaymentsAttribute()
+    {
+        return $this->investments()
+            ->where('investments.status', 'pending')
+            ->join('projects', 'investments.project_id', '=', 'projects.id')
+            ->sum(DB::raw('investments.amount * (projects.interest_rate / 100)'));
+    }
+
+    public function getLatestConversationAttribute()
+    {
+        return $this->supportConversations()->latest()->first();
     }
 }

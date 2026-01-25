@@ -54,7 +54,10 @@ class Category extends Model
                 );
         });
     }
-
+    public function scopeOrderedByLocale($query, $locale)
+    {
+        return $query->orderBy("name_$locale");
+    }
     public function getNameAttribute()
     {
         return $this->translate('name');

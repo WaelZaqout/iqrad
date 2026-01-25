@@ -228,7 +228,7 @@
                     <i class="fas fa-chart-bar"></i>
                 </div>
 
-                <div class="summary-value">{{ $percentage }}%</div>
+                <div class="summary-value">{{ $stats['percentage'] }}%</div>
                 <div class="summary-label">{{ __('auth.current_funding_percentage') }}</div>
             </div>
         </div>
@@ -243,7 +243,7 @@
                     {{ __('auth.sar') }}</span>
             </div>
             <div class="progress-container">
-                <div class="progress-fill" style="width: {{ $percentage }}%"></div>
+                <div class="progress-fill" style="width: {{ $stats['percentage'] }}%"></div>
             </div>
             <div class="progress-stats">
                 <div class="progress-stat">
@@ -532,7 +532,7 @@
                 <div
                     style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); height: 8px; border-radius: 4px; margin-bottom: 1.5rem; overflow: hidden;">
                     <div
-                        style="height: 100%; background: linear-gradient(90deg, #1e40af, #10b981); width: {{ $percentage }}%;">
+                        style="height: 100%; background: linear-gradient(90deg, #1e40af, #10b981); width: {{ $stats['percentage']}}%;">
                     </div>
                 </div>
                 <div class="table-responsive">

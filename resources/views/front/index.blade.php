@@ -184,7 +184,6 @@
                                     {{ __('auth.sar') }}
                                 </span>
                             </div>
-SupportChatController
 
                             <div class="progress-bar">
                                 <div class="progress-fill" style="width: {{ $project->percentage }}%"></div>
@@ -378,35 +377,5 @@ SupportChatController
         </div>
     </section>
 
-    <script>
-        function toggleFaq(element) {
-            const answer = element.querySelector('.faq-answer');
-            const toggle = element.querySelector('.faq-toggle');
 
-            if (answer.style.display === 'block') {
-                answer.style.display = 'none';
-                toggle.style.transform = 'rotate(0deg)';
-            } else {
-                answer.style.display = 'block';
-                toggle.style.transform = 'rotate(180deg)';
-            }
-        }
-    </script>
-    <script>
-        function filterProjects(status) {
-
-            // Active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById('btn-' + status).classList.add('active');
-
-            // Fetch projects
-            fetch(`{{ route('projects.filter') }}?status=${status}`)
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById('projects-container').innerHTML = html;
-                });
-        }
-    </script>
 @endsection

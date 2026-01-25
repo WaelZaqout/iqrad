@@ -30,4 +30,6 @@ class Investment extends Model
     {
         return $this->belongsTo(User::class, 'investor_id');
     }
+    // في موديل User أو Investor
+
 }
