@@ -1,61 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Iqrad – Smart Lending & Investment Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Iqrad is a **web-based smart lending and investment platform** built with **Laravel**.  
+It connects **investors** with **borrowers**, enabling transparent, secure, and automated financing while providing full administrative control.
 
-## About Laravel
+The platform manages the **complete financing lifecycle**, from loan requests and investment funding to repayments and profit distribution.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎥 Demo Video
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Click the thumbnail to watch the demo:
 
-## Learning Laravel
+[![Watch the demo video](assets/video-thumbnail.png)](https://drive.google.com/file/d/1n8CB5Ka6T5Mha6sLwsGYFmo8tpuIX1Oz/view?usp=sharing)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Key Features
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Investor & Borrower registration with role-based access  
+- Loan request submission and approval workflow  
+- Partial and full investment support  
+- Automated installment scheduling and repayment tracking  
+- Admin dashboard with real-time insights  
+- Email/SMS notifications for approvals and due dates
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 👥 User Roles
 
-### Premium Partners
+### 👑 Admin
+- Full system control  
+- Manage platform settings (interest/profit rates, currencies, fees)  
+- Approve or reject loan requests  
+- Monitor investments, repayments, and system performance  
+- View financial and audit reports
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 💰 Investor
+- Register and manage investor profile  
+- Browse available investment opportunities  
+- Invest in approved loan requests  
+- Track investments, expected profits, and repayments  
+- View investment history and returns
 
-## Contributing
+### 👤 Borrower
+- Register and manage borrower profile  
+- Submit loan requests with required documents  
+- Track loan funding progress and status  
+- View installment schedules and repayment history  
+- Receive notifications for upcoming payments
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+> ✅ Users can register as **Investor** or **Borrower** during signup
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🧩 System Modules
 
-## Security Vulnerabilities
+- User Registration & Role Selection  
+- Borrower & Loan Request Management  
+- Investment Management  
+- Loan Lifecycle & Repayment Tracking  
+- Notifications & Alerts
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 📸 Screenshots
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Homepage
+![Homepage](screenshots/homepage.png)
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Laravel (MVC Architecture)  
+- **Frontend:** Blade + Livewire or Vue.js  
+- **Database:** MySQL  
+- **Permissions:** Spatie Laravel Permission  
+- **PDF Generation:** DOMPDF  
+- **Charts:** Chart.js / ApexCharts
+
+---
+
+## 🔐 Security
+
+- Encrypted sensitive data  
+- Hashed passwords  
+- Role-based access control  
+- Secure financial transactions
+
+---
+
+## 📊 Admin Dashboard Highlights
+
+- 💰 Total invested capital  
+- 📊 Active loans and funding progress  
+- 💵 Total repayments collected  
+- 📉 Defaulted loans overview  
+- 📈 Investor profit distribution
+
+---
+
+## 🔮 Future Enhancements
+
+- Online payment gateway integration  
+- Mobile application  
+- Public REST API
+
+---
+
+## 📌 Project Status
+
+🚧 In Development
+
+---
+
+## 👨‍💻 Author
+
+**Wael Zaqout**  
+Laravel Developer
+
+---
+
+⭐ If you like this project, give it a star!

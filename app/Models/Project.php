@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\ProjectStatus;
 use App\Traits\HasLocale;
+use App\Enums\ProjectStatus;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -56,6 +58,8 @@ class Project extends Model
         if ($user->hasRole('borrower')) {
             return $query->where('borrower_id', $user->id);
         }
+
+
 
         return $query;
     }
@@ -120,17 +124,20 @@ class Project extends Model
         return $this->translate('description');
     }
 
-    public function getPercentageAttribute(): int
+    public function getPercentageAttribute()
     {
-        if ($this->funding_goal <= 0) {
-            return 0;
-        }
-
-        return min(
-            (int) round(($this->funded_amount / $this->funding_goal) * 100),
-            100
+        return \App\Services\Front\FinancialCalculator::fundingPercentage(
+            $this->funded_amount,
+            $this->funding_goal
         );
     }
+    public function getFundedAmountAttribute($value)
+    {
+        // إذا هناك قيمة مخزنة في العمود، استخدمها
+        // إذا تريد حسابها ديناميكياً من الاستثمارات:
+        return $this->investments()->sum('amount');
+    }
+
 
     public function getStatusBadgeAttribute(): array
     {
@@ -150,37 +157,7 @@ class Project extends Model
         return max($this->funding_goal - $this->funded_amount, 0);
     }
 
-    public function financialDistribution()
-    {
-        return [
-            'تطوير المنصة التقنية' => $this->funding_goal * 0.4,
-            'المحتوى التعليمي' => $this->funding_goal * 0.25,
-            'التسويق والترويج' => $this->funding_goal * 0.15,
-            'التدريب والدعم الفني' => $this->funding_goal * 0.1,
-            'التكاليف الإدارية' => $this->funding_goal * 0.1,
-        ];
-    }
-    public function getFinancialPlanAttribute(): array
-    {
-        $years = ['الأولى', 'الثانية', 'الثالثة'];
-        $plan = [];
 
-        $initialRevenue = $this->funding_goal * 0.3;
-        $cost = $this->funding_goal * 0.25;
-
-        foreach ($years as $i => $year) {
-            $revenue = $initialRevenue * pow(2, $i);
-            $plan[] = [
-                'year' => $year,
-                'revenue' => $revenue,
-                'cost' => $cost,
-                'profit' => $revenue - $cost,
-                'profit_percent' => round((($revenue - $cost) / $cost) * 100, 1),
-            ];
-        }
-
-        return $plan;
-    }
 
     public function scopeOfStatus($query, $status = null)
     {
@@ -296,50 +273,5 @@ class Project extends Model
         if ($this->image) {
             Storage::disk('public')->delete($this->image);
         }
-    }
-    public static function homepageStats(): array
-    {
-        $stats = [
-            'activeProjects'    => self::where('status', ProjectStatus::Active)->count(),
-            'pendingProjects'   => self::where('status', ProjectStatus::Pending)->count(),
-            'completedProjects' => self::where('status', ProjectStatus::Completed)->count(),
-            'approvedProjects'  => self::where('status', ProjectStatus::Approved)->count(),
-            'fundedProjects'    => self::where('status', ProjectStatus::Funding)->count(),
-
-            'fundedAmount'      => self::sum('funded_amount'),
-            'fundingGoal'       => self::sum('funding_goal'),
-            'requiredFunding'   => self::where('status', ProjectStatus::Approved)->sum('funding_goal'),
-
-            'totalCapital'      => Investment::sum('amount'),
-        ];
-
-        $stats['percentage'] = $stats['fundingGoal'] > 0
-            ? round(($stats['fundedAmount'] / $stats['fundingGoal']) * 100)
-            : 0;
-
-        return $stats;
-    }
-
-    public static function toFrontendJson($projects)
-    {
-        return $projects->map(function ($p) {
-            $funded = (float) $p->investments_sum_amount ?? 0;
-            $percentage = $p->funding_goal > 0 ? (int) round(($funded / $p->funding_goal) * 100) : 0;
-
-            return [
-                'id' => $p->id,
-                'title' => $p->title,
-                'summary' => $p->summary,
-                'image' => $p->image ? asset('storage/' . $p->image) : null,
-                'created_at' => $p->created_at?->toIso8601String(),
-                'category' => $p->category ? ['id' => $p->category->id, 'name' => $p->category->name] : null,
-                'term_months' => $p->term_months,
-                'min_investment' => $p->min_investment,
-                'funding_goal' => $p->funding_goal,
-                'funded_amount' => $funded,
-                'percentage' => $percentage,
-                'interest_rate' => $p->interest_rate,
-            ];
-        });
     }
 }

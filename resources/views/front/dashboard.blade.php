@@ -194,7 +194,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.total_invested_capital') }} </div>
-                        <div class="card-value counter" data-count="{{ $totalCapital }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['totalCapital'] }}">{{ $stats['totalCapital'] }}</div>
                         <div class="card-unit">{{ __('auth.sar') }}</div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.total_profits_received') }}</div>
-                        <div class="card-value counter" data-count="{{ $receivedProfits }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['receivedProfits'] }}">{{ $stats['receivedProfits'] }}</div>
                         <div class="card-unit">{{ __('auth.sar') }}</div>
                     </div>
                 </div>
@@ -218,7 +218,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.active_projects') }}</div>
-                        <div class="card-value counter" data-count="{{ $activeProjects }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['activeProjects'] }}">{{ $stats['activeProjects'] }}</div>
                         <div class="card-unit">{{ __('auth.projects') }}</div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.completed_projects') }}</div>
-                        <div class="card-value counter" data-count="{{ $completedProjects }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['completedProjects'] }}">{{ $stats['completedProjects'] }}</div>
                         <div class="card-unit">{{ __('auth.project') }}</div>
                     </div>
                 </div>
@@ -243,7 +243,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.upcoming_payments') }}</div>
-                        <div class="card-value counter" data-count="{{ $upcomingPayments }}">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['upcomingPayments'] }}">{{ $stats['upcomingPayments'] }}</div>
                         <div class="card-unit">{{ __('auth.payment') }}</div>
                     </div>
                 </div>
@@ -255,7 +255,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.projects_under_review') }}</div>
-                        <div class="card-value counter" data-count="{{ $stats['pendingProjects'] }}">0</div>
+                        <div class="card-value counter" data-count="{['pendingProjects'] }}{ $stats">{{ $stats['pendingProjects'] }}</div>
                         <div class="card-unit">{{ __('auth.project') }}</div>
                     </div>
                 </div>
@@ -267,7 +267,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.funded_projects') }}</div>
-                        <div class="card-value counter" data-count="{{ $stats['fundedProjects'] }} ">0</div>
+                        <div class="card-value counter" data-count="{{ $stats['fundedProjects'] }}">{{ $stats['fundedProjects'] }}</div>
                         <div class="card-unit">{{ __('auth.project') }}</div>
                     </div>
                 </div>
@@ -279,7 +279,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title">{{ __('auth.total_required_funding') }}</div>
-                        <div class="card-value counter"data-count="{{ $stats['requiredFunding'] }}">0</div>
+                        <div class="card-value counter"data-count="{{ $stats['requiredFunding'] }}">{{ $stats['requiredFunding'] }}</div>
                         <div class="card-unit">{{ __('auth.sar') }}</div>
                     </div>
                 </div>

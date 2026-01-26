@@ -26,7 +26,7 @@
             <div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span>{{ __('auth.net_profit_this_month') }}:</span>
-                    <span class="text-success fs-4">{{ number_format($receivedProfits) }}
+                    <span class="text-success fs-4">{{ number_format($stats['receivedProfits']) }}
                         {{ __('auth.riyal') }}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -37,19 +37,20 @@
                 <div class="d-flex align-items-center mb-2">
                     <div class="me-3" style="width: 20px; height: 20px; background: #3b82f6; border-radius: 4px;">
                     </div>
-                    <span class="flex-grow-1">{{ __('auth.capital') }}: {{ number_format($totalCapital) }}
+                    <span class="flex-grow-1">{{ __('auth.capital') }}: {{ number_format($stats['totalCapital']) }}
                         {{ __('auth.riyal') }}</span>
                 </div>
                 <div class="d-flex align-items-center mb-2">
                     <div class="me-3" style="width: 20px; height: 20px; background: #10b981; border-radius: 4px;">
                     </div>
-                    <span class="flex-grow-1">{{ __('auth.received_profits') }}: {{ number_format($receivedProfits) }}
+                    <span class="flex-grow-1">{{ __('auth.received_profits') }}:
+                        {{ number_format($stats['receivedProfits']) }}
                         {{ __('auth.riyal') }}</span>
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="me-3" style="width: 20px; height: 20px; background: #94a3b8; border-radius: 4px;">
                     </div>
-                    <span class="flex-grow-1">{{ __('auth.expected_profits') }}: {{ number_format($expectedProfits) }}
+                    <span class="flex-grow-1">{{ __('auth.expected_profits') }}: 12,800
                         {{ __('auth.riyal') }}</span>
                 </div>
             </div>
@@ -78,28 +79,34 @@
             <tbody>
                 @foreach ($investments as $inv)
                     <tr>
-                        <td>{{ $inv->project->title }}</td>
-                        <td>{{ number_format($inv->amount) }} {{ __('auth.riyal') }}</td>
-                        <td>{{ number_format(($inv->amount * $inv->project->interest_rate) / 100) }}
-                            {{ __('auth.riyal') }}</td>
+                        <td>{{ $inv['title'] }}</td>
+
+                        <td>{{ number_format($inv['amount']) }} {{ __('auth.riyal') }}</td>
+
+                        <td>{{ number_format($inv['profit']) }} {{ __('auth.riyal') }}</td>
                         <td>
                             <span
                                 class="badge
-                        @if ($inv->status == 'paid') bg-success
-                        @elseif($inv->status == 'pending') bg-warning text-dark
-                        @else bg-danger @endif">
-                                @if ($inv->status == 'paid')
-                                    {{ __('auth.status_active') }}
-                                @elseif($inv->status == 'pending')
-                                    {{ __('auth.status_funding') }}
-                                @else
-                                    {{ __('auth.status_cancelled') }}
+                                   @if ($inv['status'] === 'paid') bg-success
+                               @elseif($inv['status'] === 'pending') bg-warning text-dark
+                                  @else bg-danger @endif">
+
+                                @if ($inv['status'] === 'paid')
+                                    +{{ number_format($inv['profit']) }}
+                                @elseif($inv['status'] === 'pending')
+                                    -{{ number_format($inv['amount']) }}
+                                @elseif($inv['status'] === 'refunded')
+                                    +{{ number_format($inv['amount']) }}
                                 @endif
                             </span>
                         </td>
-                        <td>{{ $inv->created_at->format('d/m/Y') }}</td>
+
+
+
+                        <td>{{ $inv['date'] }}</td>
                     </tr>
                 @endforeach
+
             </tbody>
         </table>
 
@@ -128,47 +135,48 @@
             <tbody>
                 @foreach ($investments as $inv)
                     <tr>
-                        <td>{{ $inv->created_at->format('d/m/Y') }}</td>
+                        <td>{{ $inv['date'] }}</td>
 
                         <td>
-                            @if ($inv->status == 'paid')
-                                {{ __('auth.profit_transfer') }} "{{ $inv->project->title }}"
-                            @elseif($inv->status == 'pending')
-                                {{ __('auth.investment_in_project') }} "{{ $inv->project->title }}"
-                            @elseif($inv->status == 'refunded')
-                                {{ __('auth.refund_from_project') }} "{{ $inv->project->title }}"
+                            @if ($inv['status'] === 'paid')
+                                {{ __('auth.profit_transfer') }} "{{ $inv['title'] }}"
+                            @elseif ($inv['status'] === 'pending')
+                                {{ __('auth.investment_in_project') }} "{{ $inv['title'] }}"
+                            @elseif ($inv['status'] === 'refunded')
+                                {{ __('auth.refund_from_project') }} "{{ $inv['title'] }}"
                             @endif
                         </td>
 
                         <td
-                            class="{{ $inv->status == 'paid' || $inv->status == 'refunded' ? 'text-success' : 'text-danger' }}">
-                            @if ($inv->status == 'paid')
-                                +{{ number_format(($inv->amount * $inv->project->interest_rate) / 100) }}
-                                {{ __('auth.riyal') }}
-                            @elseif($inv->status == 'pending')
-                                -{{ number_format($inv->amount) }} {{ __('auth.riyal') }}
-                            @elseif($inv->status == 'refunded')
-                                +{{ number_format($inv->amount) }} {{ __('auth.riyal') }}
+                            class="{{ in_array($inv['status'], ['paid', 'refunded']) ? 'text-success' : 'text-danger' }}">
+                            @if ($inv['status'] === 'paid')
+                                +{{ number_format($inv['profit']) }} {{ __('auth.riyal') }}
+                            @elseif ($inv['status'] === 'pending')
+                                -{{ number_format($inv['amount']) }} {{ __('auth.riyal') }}
+                            @elseif ($inv['status'] === 'refunded')
+                                +{{ number_format($inv['amount']) }} {{ __('auth.riyal') }}
                             @endif
                         </td>
 
                         <td>
                             <span
                                 class="badge
-                        @if ($inv->status == 'paid') bg-success
-                        @elseif($inv->status == 'pending') bg-primary
-                        @else bg-danger @endif">
-                                @if ($inv->status == 'paid')
+        @if ($inv['status'] === 'paid') bg-success
+        @elseif($inv['status'] === 'pending') bg-primary
+        @else bg-danger @endif">
+                                @if ($inv['status'] === 'paid')
                                     {{ __('auth.completed_success') }} ✅
-                                @elseif($inv->status == 'pending')
+                                @elseif($inv['status'] === 'pending')
                                     {{ __('auth.successful') }} ✅
                                 @else
                                     {{ __('auth.cancelled') }} ❌
                                 @endif
                             </span>
                         </td>
+
                     </tr>
                 @endforeach
+
             </tbody>
         </table>
 

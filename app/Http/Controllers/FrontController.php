@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-
-use OpenAI;
-use OpenAI\Client;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Project;
 use App\Models\Category;
 use App\Models\Investment;
 use Illuminate\Http\Request;
-use App\Models\SupportConversation;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Notifications\ApplicationAcceptedNotification;
+use App\Services\Front\DashboardService;
+use App\Services\Front\FinancialCalculator;
+use App\Services\Front\UserInvestmentService;
 
 class FrontController extends Controller
 {
@@ -29,11 +26,8 @@ class FrontController extends Controller
 
         return view('front.index', [
             'categories' => Category::orderedByLocale(app()->getLocale())->get(),
-
-            'projects'   => Project::visibleTo(Auth::user())->latest()->get(),
-
-            'stats'      => Project::homepageStats(),
-
+            'projects'   => Project::visibleTo(Auth::user())->latest()->take(3)->get(),
+            'stats' => DashboardService::homepageStats(),
             'reviews'    => Review::homepage(),
             'userReview' => Auth::user()?->review,
             'averageRating' => Review::averageRating(),
@@ -48,33 +42,40 @@ class FrontController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
+        $investments = UserInvestmentService::investmentsWithStats();
+
 
         return view('front.dashboard', [
             'categories'       => Category::orderedByLocale(app()->getLocale())->get(),
-            'projects'         => Project::with('category')->visibleTo($user)->paginate(10)->withQueryString(),
-            'stats'            => Project::homepageStats(),
+            'projects'         => Project::with('investments', 'category')->visibleTo($user)->paginate(10)->withQueryString(),
+            'stats' => DashboardService::homepageStats(),
             'conversation'     => $user?->latestConversation,
             'upcomingPayments' => $user?->upcomingPayments ?? 0,
+            'investments'      => $investments,
         ]);
     }
-        public function filter(Request $request)
-        {
-            $status = $request->query('status', 'all');
-            $category = $request->query('category'); // يمكن أن يكون null
+    public function filter(Request $request)
+    {
+        $user = Auth::user();
 
-            $projects = Project::with('category')
-                ->withInvestmentsSum()
-                ->active()
-                ->ofStatus($status);
+        $status   = $request->query('status', 'all');
+        $category = $request->query('category');
 
-            if ($category) {
-                $projects->ofCategory($category);
-            }
+        $projects = Project::with('category')
+            ->withInvestmentsSum()
+            ->active()
+            ->visibleTo($user)   // ✅ هذا هو الحل
+            ->ofStatus($status);
 
-            $projects = $projects->latest()->paginate(10);
-
-            return view('front.partials.projects-cards', compact('projects'))->render();
+        if ($category) {
+            $projects->ofCategory($category);
         }
+
+        $projects = $projects->latest()->paginate(9);
+
+
+        return view('front.partials.projects-cards', compact('projects'))->render();
+    }
 
 
     public function details($id)
@@ -93,8 +94,9 @@ class FrontController extends Controller
             'project' => $project,
             'borrower' => $project->borrower,
             'remaining' => $project->remaining(),
-            'financialPlan' => $project->financialPlan,
-            'stats' => $project->homepageStats(),
+            'financialPlan' => FinancialCalculator::financialPlan($project->funding_goal),
+            'stats' => DashboardService::homepageStats(),
+
             'reviews' => $reviews,
             'userReview' => $userReview,
             'averageRating' => $averageRating,
@@ -110,8 +112,8 @@ class FrontController extends Controller
 
         return view('front.project', [
             'categories'       => Category::orderedByLocale(app()->getLocale())->get(),
-            'projects'         => Project::with('category')->visibleTo($user)->paginate(10)->withQueryString(),
-            'stats'            => Project::homepageStats(),
+            'projects'         => Project::with('category')->visibleTo($user)->paginate(9)->withQueryString(),
+            'stats' => DashboardService::homepageStats(),
         ]);
     }
     public function favorites()
@@ -133,7 +135,7 @@ class FrontController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $notifications = $user->notifications()->latest()->take(50)->get();
+        $notifications = $user->notifications->latest()->take(50)->get();
 
         return view('front.partials.notification', compact('notifications'));
     }
