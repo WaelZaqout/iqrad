@@ -249,42 +249,50 @@
             </div>
         </div>
     </footer>
-    <!-- Chat Widget -->
-    <div class="chat-widget">
-        <!-- Window -->
-        <div id="chat-window" class="chat-window">
-            <div class="chat-header">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-robot"></i>
-                    <div>
-                        <div style="font-weight: bold; font-size: 0.9rem;">المساعد الذكي</div>
-                        <div style="font-size: 0.7rem; opacity: 0.9;">Gemini Pro متصل</div>
-                    </div>
-                </div>
-                <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer;"><i
-                        class="fas fa-times"></i></button>
+<!-- Invest Modal -->
+<div id="investModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3 style="font-weight: 800; font-size: 1.5rem; color: var(--gray-900);">
+                {{ __('auth.invest_project') }}</h3>
+            <button class="close-modal" onclick="closeModal('investModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div
+            style="background: var(--bg-light); padding: 1.25rem; border-radius: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; border: 1px solid var(--border);">
+            <div
+                style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <i class="fas fa-project-diagram"></i>
             </div>
-
-            <div id="chat-messages" class="chat-body">
-                <div class="msg msg-model">
-                    مرحباً بك في إقراضك! أنا مساعدك الذكي. كيف يمكنني مساعدتك في استثماراتك اليوم؟
+            <div>
+                <div style="font-size: 0.85rem; color: var(--gray-500); font-weight: 600;">
+                    {{ __('auth.project_name') }}</div>
+                <div id="modalProjectName" style="font-weight: 800; font-size: 1.1rem; color: var(--gray-900);">
                 </div>
-            </div>
-
-            <div class="chat-input-area">
-                <input type="text" id="chat-input" class="chat-input" placeholder="اكتب استفسارك هنا..."
-                    onkeydown="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()" class="btn btn-primary"
-                    style="padding: 0.5rem 1rem; border-radius: 0.5rem;"><i
-                        class="fas fa-paper-plane rtl:rotate-180"></i></button>
             </div>
         </div>
-
-        <!-- Toggle Button -->
-        <button id="chat-toggle-btn" onclick="toggleChat()" class="chat-toggle">
-            <i class="fas fa-headset"></i>
+        <div class="form-group">
+            <label class="form-label">{{ __('auth.investment_amount') }} <span id="modalMinInvest"
+                    style="color:var(--primary)"></span> {{ __('auth.riyal') }})</label>
+            <div style="position: relative;">
+                <input type="number" id="investAmountModal" class="form-control" oninput="calculateReturn()"
+                    style="padding-left: 3rem; font-weight: bold; font-size: 1.2rem;">
+                <span
+                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-weight: bold;">SAR</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">{{ __('auth.expected_monthly_return') }}</label>
+            <input type="text" id="expectedReturnModal" class="form-control" readonly
+                style="background: var(--gray-100); color: var(--primary-dark); font-weight: 800;">
+        </div>
+        <button onclick="redirectToStripe()" class="btn btn-primary" style="width: 100%; padding: 1.25rem;">
+            <i class="fas fa-lock"></i> {{ __('auth.secure_payment') }}
         </button>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--gray-400); margin-top: 1rem;"><i
+                class="fas fa-shield-alt"></i> {{ __('auth.transactions_secure') }}</p>
     </div>
+</div>
+
 
     <!-- Image Generator Modal -->
     <div id="image-modal" class="modal-overlay">
@@ -327,257 +335,33 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Application Logic -->
-    <script type="module">
-        import {
-            GoogleGenAI
-        } from "@google/genai";
-
-        // Global State
-        let chatHistory = [];
-        let generatedImageUrl = null;
-
-        // --- Utils ---
-        async function ensureApiKey() {
-            if (window.aistudio) {
-                const hasKey = await window.aistudio.hasSelectedApiKey();
-                if (!hasKey) {
-                    await window.aistudio.openSelectKey();
-                    return await window.aistudio.hasSelectedApiKey();
-                }
-                return true;
-            }
-            return true;
-        }
-
-        const getAIClient = () => new GoogleGenAI({
-            apiKey: process.env.API_KEY
-        });
-
-        // --- UI Logic ---
-        window.filterProjects = (status) => {
-            // Update Buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('assets/front/js/script.js') }}"></script>
+    <script src="{{ asset('assets/front/js/project-form.js') }}"></script>
+    <script src="{{ asset('assets/front/js/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/front/js/auth-modal.js') }}"></script>
+    <script src="{{ asset('assets/front/js/stripe.js') }}"></script>
+    <script src="{{ asset('assets/front/js/chat.js') }}"></script>
+    <script src="{{ asset('assets/front/js/faq.js') }}"></script>
+    <script src="{{ asset('assets/front/js/profit-chart.js') }}"></script>
+    <script>
+        function filterProjects(status) {
+            // Active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
             document.getElementById('btn-' + status).classList.add('active');
 
-            // Toggle Cards
-            const cards = document.querySelectorAll('.project-card');
-            cards.forEach(card => {
-                const cardStatus = card.getAttribute('data-status');
-                if (status === 'all' || cardStatus === status) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-        }
-
-        // --- Chat Logic ---
-        window.toggleChat = () => {
-            const chatWindow = document.getElementById('chat-window');
-            const toggleBtn = document.getElementById('chat-toggle-btn');
-
-            if (getComputedStyle(chatWindow).display === 'none') {
-                chatWindow.classList.add('open');
-                toggleBtn.style.transform = 'scale(0)';
-            } else {
-                chatWindow.classList.remove('open');
-                toggleBtn.style.transform = 'scale(1)';
-            }
-        }
-
-        window.sendMessage = async () => {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            // Add user message
-            appendMessage('user', text);
-            input.value = '';
-
-            // Add loading
-            const loadingId = appendLoading();
-
-            try {
-                const ai = getAIClient();
-                const chat = ai.chats.create({
-                    model: 'gemini-3-pro-preview',
-                    history: chatHistory.map(m => ({
-                        role: m.role,
-                        parts: [{
-                            text: m.text
-                        }]
-                    })),
-                    config: {
-                        systemInstruction: "أنت مساعد مالي ذكي لمنصة إقراضك. تحدث بالعربية."
-                    }
+            // Fetch projects
+            fetch(`{{ route('projects.filter') }}?status=${status}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('projects-container').innerHTML = html;
                 });
-
-                const result = await chat.sendMessage({
-                    message: text
-                });
-                const response = result.text;
-
-                removeLoading(loadingId);
-                appendMessage('model', response);
-
-                chatHistory.push({
-                    role: 'user',
-                    text: text
-                });
-                chatHistory.push({
-                    role: 'model',
-                    text: response
-                });
-
-            } catch (error) {
-                console.error(error);
-                removeLoading(loadingId);
-                appendMessage('model', 'عذراً، حدث خطأ. حاول مرة أخرى.');
-            }
-        }
-
-        function appendMessage(role, text) {
-            const container = document.getElementById('chat-messages');
-            const div = document.createElement('div');
-            div.className = `msg msg-${role}`;
-            div.textContent = text;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function appendLoading() {
-            const container = document.getElementById('chat-messages');
-            const id = 'loading-' + Date.now();
-            const div = document.createElement('div');
-            div.id = id;
-            div.className = 'msg msg-model';
-            div.innerHTML = '<i class="fas fa-ellipsis-h fa-beat"></i>';
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-            return id;
-        }
-
-        function removeLoading(id) {
-            const el = document.getElementById(id);
-            if (el) el.remove();
-        }
-
-        // --- Image Generation Logic ---
-        window.openImageModal = () => document.getElementById('image-modal').classList.add('open');
-        window.closeImageModal = () => {
-            document.getElementById('image-modal').classList.remove('open');
-            resetImageModal();
-        };
-
-        function resetImageModal() {
-            document.getElementById('image-prompt').value = '';
-            document.getElementById('generated-image-container').classList.add('hidden');
-            document.getElementById('image-loading').classList.add('hidden');
-            document.getElementById('btn-generate').classList.remove('hidden');
-            document.getElementById('btn-confirm').classList.add('hidden');
-        }
-
-        window.generateImage = async () => {
-            const prompt = document.getElementById('image-prompt').value;
-            if (!prompt) return;
-
-            document.getElementById('image-loading').classList.remove('hidden');
-
-            try {
-                await ensureApiKey();
-                const ai = getAIClient();
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3-pro-image-preview',
-                    contents: {
-                        parts: [{
-                            text: prompt
-                        }]
-                    },
-                    config: {
-                        imageConfig: {
-                            aspectRatio: "16:9",
-                            imageSize: "1K"
-                        }
-                    }
-                });
-
-                let imgUrl = null;
-                for (const part of response.candidates?.[0]?.content?.parts || []) {
-                    if (part.inlineData) {
-                        imgUrl = `data:image/png;base64,${part.inlineData.data}`;
-                        break;
-                    }
-                }
-
-                if (imgUrl) {
-                    generatedImageUrl = imgUrl;
-                    document.getElementById('generated-image-preview').src = imgUrl;
-                    document.getElementById('generated-image-container').classList.remove('hidden');
-                    document.getElementById('btn-generate').classList.add('hidden');
-                    document.getElementById('btn-confirm').classList.remove('hidden');
-                }
-            } catch (err) {
-                console.error(err);
-                if (err.message && err.message.includes("Requested entity was not found")) {
-                    try {
-                        if (window.aistudio) {
-                            await window.aistudio.openSelectKey();
-                            alert("تم تحديث المفتاح، حاول مرة أخرى.");
-                        }
-                    } catch (e) {
-                        console.error(e);
-                    }
-                } else {
-                    alert('فشل توليد الصورة. تأكد من الاتصال.');
-                }
-            } finally {
-                document.getElementById('image-loading').classList.add('hidden');
-            }
-        }
-
-        window.confirmImage = () => {
-            if (generatedImageUrl) {
-                const container = document.getElementById('projects-grid');
-
-                // Manually construct HTML for new AI project
-                const newCard = document.createElement('div');
-                newCard.className = 'project-card';
-                newCard.setAttribute('data-status', 'active');
-
-                // Standard boilerplate for a new "AI Generated" project
-                newCard.innerHTML = `
-                    <div class="card-image">
-                        <img src="${generatedImageUrl}" alt="AI Project">
-                        <span class="badge badge-active">نشط</span>
-                        <div class="badge badge-category"><i class="fas fa-lightbulb" style="color:var(--primary)"></i> ابتكار</div>
-                    </div>
-                    <div class="card-content">
-                        <h4 class="card-title">مشروع ذكي جديد (AI)</h4>
-                        <div class="info-grid">
-                            <div class="info-box"><div class="info-label">المدة</div><div class="info-value">18 شهر</div></div>
-                            <div class="info-box"><div class="info-label">العائد</div><div class="info-value">14%</div></div>
-                            <div class="info-box" style="grid-column: span 2;"><div class="info-label">الحد الأدنى</div><div class="info-value">10,000 ريال</div></div>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-header"><span style="font-weight: bold; color: var(--text-light);">0% مكتمل</span><span style="color: #9ca3af;">0 / 100,000</span></div>
-                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 0%;"></div></div>
-                            <div class="flex gap-2">
-                                <button class="btn btn-outline" style="flex:1">التفاصيل</button>
-                                <button class="btn btn-primary" style="flex:1">استثمر</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                container.prepend(newCard); // Add to top
-                window.closeImageModal();
-            }
         }
     </script>
-
 </body>
 
 </html>

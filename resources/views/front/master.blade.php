@@ -69,29 +69,31 @@
 
             <div class="header-actions">
                 <!-- Notifications -->
+                <!-- Notifications -->
                 @if (auth()->check())
                     <div class="dropdown">
                         <div class="icon-btn position-relative" data-bs-toggle="dropdown" title="الإشعارات"
-                            style="cursor:pointer;">
+                            style="cursor:pointer;" id="notificationBell">
                             <i class="fas fa-bell fa-lg"></i>
 
                             @if ($unreadNotifications->count() > 0)
-                                <span
+                                <span id="notificationBadge"
                                     class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                             @endif
                         </div>
 
-                        <ul class="dropdown-menu" style="min-width: 320px; padding: 0;">
+                        <ul class="dropdown-menu" style="min-width: 320px; padding: 0;" id="notificationsDropdown">
                             <li class="p-3 border-bottom bg-light">
                                 <strong>{{ __('auth.notifications') }}</strong>
                             </li>
 
                             @forelse($notifications as $notification)
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-start gap-2"
+                                    <a class="dropdown-item d-flex align-items-start gap-2 notification-item"
                                         href="{{ $notification->data['url'] ?? '#' }}"
+                                        data-notification-id="{{ $notification->id }}"
                                         style="padding: 0.75rem 1rem; border-bottom: 1px solid #f1f1f1;
-                               background: {{ $notification->read_at ? '#f3f4f6' : '#d1e7ff' }};">
+                       background: {{ $notification->read_at ? '#f3f4f6' : '#d1e7ff' }};">
                                         <div class="d-flex align-items-center justify-content-center rounded-circle"
                                             style="width: 40px; height: 40px; background: {{ $notification->read_at ? '#f3f4f6' : '#2563eb' }}; color: #fff;">
                                             <i class="fas fa-bell"></i>
@@ -892,6 +894,27 @@
     <script src="{{ asset('assets/front/js/stripe.js') }}"></script>
     <script src="{{ asset('assets/front/js/chat.js') }}"></script>
     <script src="{{ asset('assets/front/js/faq.js') }}"></script>
+    <script src="{{ asset('assets/front/js/notifications.js') }}"></script>
+    <script src="{{ asset('assets/front/js/profit-chart.js') }}"></script>
+
+    <script>
+        function filterProjects(status) {
+
+            // Active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-' + status).classList.add('active');
+
+            // Fetch projects
+            fetch(`{{ route('projects.filter') }}?status=${status}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('projects-container').innerHTML = html;
+                });
+        }
+    </script>
+
 </body>
 
 </html>

@@ -532,7 +532,7 @@
                 <div
                     style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); height: 8px; border-radius: 4px; margin-bottom: 1.5rem; overflow: hidden;">
                     <div
-                        style="height: 100%; background: linear-gradient(90deg, #1e40af, #10b981); width: {{ $stats['percentage']}}%;">
+                        style="height: 100%; background: linear-gradient(90deg, #1e40af, #10b981); width: {{ $stats['percentage'] }}%;">
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -884,254 +884,44 @@
 
         </div> <!-- نهاية modal-content -->
     </div> <!-- نهاية modal -->
+    <!-- jQuery أولًا لأن بعض السكريبتات تعتمد عليه -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script>
-        let selectedProjectId = {{ $project->id }};
-        let projectReturn = {{ $project->interest_rate }};
-        let minInvestment = {{ $project->min_investment }};
-
-        function openInvestModal(id, name, minAmount, annualReturn) {
-            selectedProjectId = id;
-            projectReturn = Number(annualReturn); // Convert number
-            minInvestment = Number(minAmount);
-
-            document.getElementById("projectName").textContent = name;
-            document.getElementById("minAmount").textContent = minInvestment;
-
-            document.getElementById("investAmount").min = minInvestment;
-            document.getElementById("investAmount").value = minInvestment;
-
-            calculateReturn();
-
-            document.getElementById("investModal").style.display = "flex";
-        }
-
-
-        function closeInvestModal() {
-            document.getElementById("investModal").style.display = "none";
-        }
-
-        function calculateReturn() {
-            let amount = Number(document.getElementById("investAmount").value);
-
-            if (amount < minInvestment) {
-                document.getElementById("investAmount").value = minInvestment;
-                amount = minInvestment;
-            }
-
-            let annual = (amount * projectReturn) / 100;
-            let monthly = annual / 12;
-
-            document.getElementById("expectedReturn").textContent =
-                monthly.toFixed(2) + " {{ __('auth.sar') }} {{ __('auth.monthly') }}";
-
-            // Update summary box
-            updateSummaryBox(amount);
-        }
-
-        function updateSummaryBox(amount) {
-            const totalProject = {{ $project->funding_goal }};
-            const termMonths = {{ $project->term_months }};
-            const sharePercentage = (amount / totalProject) * 100;
-
-            // Update by IDs to avoid brittle selectors
-            const shareEl = document.getElementById('sharePercentage');
-            if (shareEl) shareEl.textContent = sharePercentage.toFixed(2) + '%';
-
-            const termEl = document.getElementById('investmentTerm');
-            if (termEl) termEl.textContent = termMonths + ' {{ __('auth.month') }}';
-
-            const totalReturnEl = document.getElementById('totalReturn');
-            if (totalReturnEl) totalReturnEl.textContent = '+' + projectReturn + '%';
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            calculateReturn();
-        });
-
-        function redirectToStripe() {
-            let amount = Number(document.getElementById("investAmount").value);
-
-            if (amount < minInvestment) {
-                alert("{{ __('auth.investment_amount') }} {{ __('auth.must_be_at_least') }} " + minInvestment +
-                    " {{ __('auth.sar') }}");
-                return;
-            }
-
-            fetch("/investments/store", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        project_id: selectedProjectId,
-                        amount: amount
-                    })
-                })
-                .then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        window.location.href = "/checkout-stripe/" + response.investment_id;
-                    } else {
-                        alert("{{ __('auth.investment_save_error') }}");
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert("{{ __('auth.server_connection_error') }}");
-                });
-        }
-    </script>
-
-    <script>
-        document.querySelectorAll('.quick-amount').forEach(btn => {
-            btn.addEventListener('click', function() {
-                let amount = parseInt(this.dataset.amount);
-                document.getElementById('investAmount').value = amount;
-                calculateReturn();
-
-                document.querySelectorAll('.quick-amount')
-                    .forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
-    <script>
-        function closeAuthModal() {
-            const authModal = document.getElementById("authModal");
-            if (!authModal) return;
-
-            authModal.style.display = "none";
-            authModal.setAttribute("aria-hidden", "true");
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const authModal = document.getElementById("authModal");
-            const modalContent = authModal.querySelector(".modal-content"); // ✅ هذا كان ناقص
-            const loginForm = document.getElementById("loginForm");
-            const registerForm = document.getElementById("registerForm");
-            const tabLogin = document.getElementById("authTabLogin");
-            const tabRegister = document.getElementById("authTabRegister");
-
-            // إغلاق عند الضغط خارج المودال
-            authModal.addEventListener("click", function(e) {
-                if (!modalContent.contains(e.target)) {
-                    closeAuthModal();
-                }
-            });
-
-            function showTab(tab) {
-                if (tab === "login") {
-                    loginForm.style.display = "block";
-                    registerForm.style.display = "none";
-                    tabLogin.classList.add("active");
-                    tabRegister.classList.remove("active");
-                } else {
-                    loginForm.style.display = "none";
-                    registerForm.style.display = "block";
-                    tabLogin.classList.remove("active");
-                    tabRegister.classList.add("active");
-                }
-            }
-
-            document.querySelectorAll(".open-auth").forEach(btn => {
-                btn.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    const tab = this.dataset.tab || "register";
-                    authModal.style.display = "flex";
-                    authModal.setAttribute("aria-hidden", "false");
-                    showTab(tab);
-                });
-            });
-
-            tabLogin.addEventListener("click", () => showTab("login"));
-            tabRegister.addEventListener("click", () => showTab("register"));
-
-            document.getElementById("toLogin").addEventListener("click", e => {
-                e.preventDefault();
-                showTab("login");
-            });
-            document.getElementById("toRegister").addEventListener("click", e => {
-                e.preventDefault();
-                showTab("register");
-            });
-        });
-    </script>
-
+    <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- البيانات الخاصة بالرسوم البيانية -->
     <script>
-        // Initialize funding distribution chart
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('fundingChart').getContext('2d');
-            const fundingChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['{{ __('auth.platform_development') }}',
-                        '{{ __('auth.educational_content') }}', '{{ __('auth.marketing') }}',
-                        '{{ __('auth.training') }}', '{{ __('auth.administrative_costs') }}'
-                    ],
-                    datasets: [{
-                        data: [40, 25, 15, 10, 10],
-                        backgroundColor: [
-                            '#059669',
-                            '#0891b2',
-                            '#7c3aed',
-                            '#ea580c',
-                            '#6b7280'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
-        });
+        window.fundingChartData = {
+            labels: [
+                "{{ __('auth.platform_development') }}",
+                "{{ __('auth.educational_content') }}",
+                "{{ __('auth.marketing') }}",
+                "{{ __('auth.training') }}",
+                "{{ __('auth.administrative_costs') }}"
+            ],
+            values: [40, 25, 15, 10, 10]
+        };
     </script>
     <script>
-        document.querySelector('.btn-invest').addEventListener('click', function(e) {
-            e.target.disabled = true;
-        });
+        window.favoritesToggleUrl = "{{ route('favorites.toggle') }}";
     </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <script>
-        $(document).on('click', '.add-to-favorite', function() {
 
-            let btn = $(this);
-            let projectId = btn.data('project');
+    <!-- ملفات JS الخاصة بالمشروع -->
+    <script src="{{ asset('assets/front/js/project-form.js') }}"></script>
+    <script src="{{ asset('assets/front/js/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/front/js/auth-modal.js') }}"></script>
+    <script src="{{ asset('assets/front/js/stripe.js') }}"></script>
 
-            $.ajax({
-                url: "{{ route('favorites.toggle') }}",
-                method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    project_id: projectId
-                },
-                success: function(res) {
-                    if (res.status === 'added') {
-                        btn.removeClass('btn-outline-primary')
-                            .addClass('btn-danger');
-                    } else {
-                        btn.removeClass('btn-danger')
-                            .addClass('btn-outline-primary');
-                    }
-                }
-            });
+    <!-- حذف chat.js مؤقتًا إذا غير موجود -->
+    {{-- <script src="{{ asset('assets/front/js/chat.js') }}"></script> --}}
 
-        });
-    </script>
+    <script src="{{ asset('assets/front/js/faq.js') }}"></script>
+    <script src="{{ asset('assets/front/js/favorites.js') }}"></script>
+    <script src="{{ asset('assets/front/js/profit-chart.js') }}"></script>
+    {{-- <script src="{{ asset('assets/front/js/script.js') }}"></script> --}}
+
 
 </body>
 

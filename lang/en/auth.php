@@ -499,8 +499,20 @@ return [
     'no_projects_found' => 'No projects found',
     'try_other_filters' => 'Try using other filters to find projects that match your interests.',
     'open_for_funding' => 'Open for Funding',
-    'more'=>'More',
-    'my_project'=>'My Project',
-    'edit_request' => 'Edit Funding Request'
+    'more' => 'More',
+    'my_project' => 'My Project',
+    'edit_request' => 'Edit Funding Request',
+    'success_title' => 'Payment Successful',
+    'success_message' => 'Thank you for your investment — Your transaction has been recorded successfully.',
+    'transaction_details' => 'Transaction Details',
+    'investor_name' => 'Investor Name',
+    'transaction_id' => 'Transaction ID',
+    'payment_date' => 'Payment Date',
+    'payment_method' => 'Payment Method',
+    'dashboard' => 'Dashboard',
+    'download_receipt' => 'Download Receipt',
+    'browse_projects' => 'Browse Projects',
+    'contact_message' => 'If you face any issues, contact us at',
+    'support_email' => 'support@iqrad.example',
 
 ];

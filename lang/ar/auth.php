@@ -416,8 +416,8 @@ return [
     'no_projects_found' => 'لم يتم العثور على مشاريع',
     'try_other_filters' => 'حاول استخدام فلاتر أخرى للعثور على مشاريع تناسب اهتماماتك.',
     'open_for_funding' => 'مفتوح للتمويل',
-    'more'=>'المزيد',
-    'my_project'=>'مشاريعي',
+    'more' => 'المزيد',
+    'my_project' => 'مشاريعي',
 
     /*
     |--------------------------------------------------------------------------
@@ -504,9 +504,20 @@ return [
     'all_rights_reserved' => 'جميع الحقوق محفوظة',
     'instructions' => 'التعليمات',
     'edit' => 'تعديل',
-    'edit_request' => 'تعديل طلب التمويل'
+    'edit_request' => 'تعديل طلب التمويل',
 
+    'success_title' => 'تمت عملية الدفع بنجاح',
+    'success_message' => 'شكراً لاستثمارك — تم تسجيل معاملتك بنجاح.',
+    'transaction_details' => 'تفاصيل العملية',
+    'investor_name' => 'اسم المستثمر',
+    'transaction_id' => 'معرّف العملية',
+    'payment_date' => 'تاريخ الدفع',
+    'payment_method' => 'طريقة الدفع',
+    'dashboard' => 'لوحة التحكم',
+    'download_receipt' => 'تحميل الإيصال',
+    'browse_projects' => 'تابع تصفح المشاريع',
+    'contact_message' => 'إذا واجهت أي مشكلة، تواصل معنا عبر',
+    'support_email' => 'support@iqrad.example',
 
 
 ];
-

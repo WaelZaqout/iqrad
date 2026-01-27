@@ -385,9 +385,9 @@
     <script src="{{ asset('assets/front/js/stripe.js') }}"></script>
     <script src="{{ asset('assets/front/js/chat.js') }}"></script>
     <script src="{{ asset('assets/front/js/faq.js') }}"></script>
+    <script src="{{ asset('assets/front/js/profit-chart.js') }}"></script>
     <script>
         function filterProjects(status) {
-
             // Active button
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');

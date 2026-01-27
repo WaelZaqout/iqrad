@@ -148,13 +148,16 @@ class FrontController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 403);
         }
 
+        // احصل على عدد الإشعارات غير المقروءة قبل التحديث
+        $unreadCount = $user->unreadNotifications()->count();
 
-        $count = $user->unreadNotifications->count();
-        $user->unreadNotifications->update(['read_at' => now()]);
+        // حدّث جميع الإشعارات غير المقروءة
+        $user->unreadNotifications()->update(['read_at' => now()]);
 
         return response()->json([
             'status' => 'success',
-            'marked' => $count
+            'marked' => $unreadCount,
+            'message' => "تم تحديث $unreadCount إشعارات"
         ]);
     }
 

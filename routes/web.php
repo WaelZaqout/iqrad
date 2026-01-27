@@ -19,9 +19,9 @@ use App\Http\Controllers\Admin\ProjectController;
 Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::get('/project', [FrontController::class, 'project'])->name('project');
 Route::get('/favorites', [FrontController::class, 'favorites'])->name('favorites');
-Route::post('/favorites/toggle', [FavoriteController::class, 'store'])
-    ->name('favorites.toggle')
-    ->middleware('auth');
+    Route::post('/favorites/toggle', [FavoriteController::class, 'store'])
+        ->name('favorites.toggle')
+        ->middleware('auth');
 Route::get('/notification', [FrontController::class, 'notification'])->name('notification');
 
 // routes/web.php
